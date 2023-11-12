@@ -1,0 +1,9 @@
+.svelte-kit/**
+static/**
+build/**
+node_modules/**
+helm/**
+src-tauri/target/**
+src-tauri/gen/**
+src/lib/openapi/**
+!src/lib/openapi/index.ts

@@ -1,0 +1,17 @@
+import { redirect } from '@sveltejs/kit';
+import type { PageLoad } from './$types';
+import { base } from '$app/paths';
+import { createNotification } from '$lib/stores/notifications';
+
+export const load: PageLoad = async (event) => {
+	const { signUpMethods } = await event.parent();
+
+	if (!signUpMethods.enabled) {
+		createNotification('Sign up is not enabled');
+		throw redirect(302, `${base}/signin`);
+	}
+
+	return {
+		signUpMethods
+	};
+};
