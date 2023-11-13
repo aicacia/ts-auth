@@ -1,12 +1,13 @@
 <svelte:options immutable />
 
 <script lang="ts">
-	import type { PageData } from './$types';
+	import type { User } from '$lib/openapi/auth';
+	import { user } from '$lib/stores/user';
 	import Emails from './_Emails.svelte';
 	import ResetPassword from './_ResetPassword.svelte';
 	import Username from './_Username.svelte';
 
-	export let data: PageData;
+	$: currentUser = $user as User;
 </script>
 
 <svelte:head>
@@ -18,7 +19,7 @@
 		class="flex flex-col flex-shrink mx-4 sm:container sm:mx-auto my-4 bg-white dark:bg-gray-800 shadow p-4"
 	>
 		<div class="mb-2">
-			<Username user={data.user} username={data.user.username} />
+			<Username user={currentUser} username={currentUser.username} />
 		</div>
 	</div>
 </div>
@@ -27,7 +28,7 @@
 		class="flex flex-col flex-shrink mx-4 sm:container sm:mx-auto mb-4 bg-white dark:bg-gray-800 shadow p-4"
 	>
 		<div class="mb-2">
-			<Emails user={data.user} />
+			<Emails user={currentUser} />
 		</div>
 	</div>
 </div>

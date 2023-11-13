@@ -42,6 +42,10 @@ export interface ResetPasswordRequest {
     resetUserPasswordRequest: ResetUserPasswordRequest;
 }
 
+export interface SendConfirmationEmailRequest {
+    emailId: number;
+}
+
 export interface SetPrimaryEmailRequest {
     emailId: number;
 }
@@ -114,6 +118,19 @@ export interface UserApiInterface {
     /**
      */
     resetPassword(resetUserPasswordRequest: ResetUserPasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
+
+    /**
+     * 
+     * @param {number} emailId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApiInterface
+     */
+    sendConfirmationEmailRaw(requestParameters: SendConfirmationEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     */
+    sendConfirmationEmail(emailId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -314,6 +331,41 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
     async resetPassword(resetUserPasswordRequest: ResetUserPasswordRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
         const response = await this.resetPasswordRaw({ resetUserPasswordRequest: resetUserPasswordRequest }, initOverrides);
         return await response.value();
+    }
+
+    /**
+     */
+    async sendConfirmationEmailRaw(requestParameters: SendConfirmationEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.emailId === null || requestParameters.emailId === undefined) {
+            throw new runtime.RequiredError('emailId','Required parameter requestParameters.emailId was null or undefined when calling sendConfirmationEmail.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Authorization", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/users/send-confirmation/{email_id}`.replace(`{${"email_id"}}`, encodeURIComponent(String(requestParameters.emailId))),
+            method: 'PUT',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async sendConfirmationEmail(emailId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.sendConfirmationEmailRaw({ emailId: emailId }, initOverrides);
     }
 
     /**

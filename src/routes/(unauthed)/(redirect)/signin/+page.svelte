@@ -81,7 +81,7 @@
 				await goto(`${base}/`);
 			}
 		} catch (error) {
-			handleError(error);
+			await handleError(error);
 		} finally {
 			loading = false;
 		}

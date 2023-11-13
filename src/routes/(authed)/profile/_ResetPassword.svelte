@@ -86,7 +86,7 @@
 				createNotification('password_reset', 'success');
 			}
 		} catch (error) {
-			handleError(error);
+			await handleError(error);
 		} finally {
 			loading = false;
 		}

@@ -79,7 +79,7 @@
 				createNotification('username_changed', 'success');
 			}
 		} catch (error) {
-			handleError(error);
+			await handleError(error);
 		} finally {
 			loading = false;
 		}

@@ -29,7 +29,7 @@ async function fetchSignUpMethods() {
 		signUpMethodsLoaded = true;
 		emitter.emit('signUpMethods', signUpMethods);
 	} catch (e) {
-		handleError(e);
+		await handleError(e);
 	}
 }
 

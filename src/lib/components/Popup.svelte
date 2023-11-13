@@ -39,11 +39,15 @@
 </script>
 
 <div
-	class="absolute shadow-md border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:outline-none z-[1001]"
+	class="absolute shadow-md border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:outline-none z-[1001] transition-transform"
 	bind:this={child}
 	role="menu"
-	class:scale-0={!open}
-	class:scale-100={open}
+	class:scale-y-0={!open}
+	class:scale-y-100={open}
+	class:origin-top-right={position === 'bottom-right'}
+	class:origin-top-left={position === 'bottom-left'}
+	class:origin-bottom-right={position === 'top-right'}
+	class:origin-bottom-left={position === 'top-left'}
 	tabindex="-1"
 >
 	<slot />

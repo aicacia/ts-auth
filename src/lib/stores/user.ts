@@ -76,6 +76,44 @@ export async function changeUsername(username: string) {
 	userWritable.update((user) => (user ? { ...user, username } : null));
 }
 
+export async function setPrimaryEmail(emailId: number) {
+	await userApi.setPrimaryEmail(emailId);
+	userWritable.update((user) => {
+		if (user) {
+			const emailIndex = user.emails.findIndex((e) => e.id === emailId);
+			if (emailIndex !== -1) {
+				const newEmails = user.emails.slice();
+				const newEmail = newEmails[emailIndex];
+				if (user.email) {
+					newEmails[emailIndex] = user.email;
+				} else {
+					newEmails.splice(emailIndex, 1);
+				}
+				return { ...user, email: newEmail, emails: newEmails };
+			}
+		}
+		return user;
+	});
+}
+
+export async function confirmEmail(emailId: number, confirmationToken: string) {
+	await authApi.confirmEmail(confirmationToken);
+	userWritable.update((user) => {
+		if (user) {
+			if (user.email?.id === emailId) {
+				return { ...user, email: { ...user.email, confirmed: true } };
+			}
+			const emailIndex = user.emails.findIndex((e) => e.id === emailId);
+			if (emailIndex !== -1) {
+				const newEmails = user.emails.slice();
+				newEmails[emailIndex] = { ...newEmails[emailIndex], confirmed: true };
+				return { ...user, emails: newEmails };
+			}
+		}
+		return user;
+	});
+}
+
 let initialCall = true;
 export async function getCurrentUser() {
 	try {
