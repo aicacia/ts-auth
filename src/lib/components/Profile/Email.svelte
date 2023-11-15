@@ -4,6 +4,7 @@
 	import Dropdown from '$lib/components/Dropdown.svelte';
 	import type { Email } from '$lib/openapi/auth';
 	import MoreVertical from 'lucide-svelte/dist/svelte/icons/more-vertical.svelte';
+	import CheckCircle2 from 'lucide-svelte/dist/svelte/icons/check-circle-2.svelte';
 	import Send from 'lucide-svelte/dist/svelte/icons/send.svelte';
 	import Mail from 'lucide-svelte/dist/svelte/icons/mail.svelte';
 	import { setPrimaryEmail, confirmEmail } from '$lib/stores/user';
@@ -49,24 +50,15 @@
 </script>
 
 <div class="flex flex-row flex-grow items-center justify-between">
-	<div class="flex flex-shrink">
-		<input type="email" value={email.email} readonly />
-		<input
-			id="confirmed-email-{email.id}"
-			type="checkbox"
-			checked={email.confirmed}
-			on:click|preventDefault
-		/>
-		<label for="confirmed-email-{email.id}">Confirmed</label>
-		{#if primary}
-			<input
-				id="primary-email-{email.id}"
-				type="checkbox"
-				checked={primary}
-				on:click|preventDefault
-			/>
-			<label for="primary-email-{email.id}">Primary</label>
-		{/if}
+	<div class="flex flex-grow">
+		<div class="relative">
+			<input type="email" value={email.email} readonly />
+			{#if email.confirmed}
+				<span class="absolute top-0 right-0 mt-1 me-1 text-green-600 cursor-help" title="Confirmed"
+					><CheckCircle2 size={22} /></span
+				>
+			{/if}
+		</div>
 	</div>
 	{#if !primary || !email.confirmed}
 		<div class="flex flex-shrink">

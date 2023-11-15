@@ -17,7 +17,10 @@ import * as runtime from '../runtime';
 import type {
   Application,
   ChangeUsernameRequest,
+  CreateUserEmailRequest,
+  Email,
   Message,
+  PaginationUser,
   ResetUserPasswordRequest,
   User,
 } from '../models/index';
@@ -26,8 +29,14 @@ import {
     ApplicationToJSON,
     ChangeUsernameRequestFromJSON,
     ChangeUsernameRequestToJSON,
+    CreateUserEmailRequestFromJSON,
+    CreateUserEmailRequestToJSON,
+    EmailFromJSON,
+    EmailToJSON,
     MessageFromJSON,
     MessageToJSON,
+    PaginationUserFromJSON,
+    PaginationUserToJSON,
     ResetUserPasswordRequestFromJSON,
     ResetUserPasswordRequestToJSON,
     UserFromJSON,
@@ -36,6 +45,10 @@ import {
 
 export interface ChangeUsernameOperationRequest {
     changeUsernameRequest: ChangeUsernameRequest;
+}
+
+export interface CreateEmailRequest {
+    createUserEmailRequest: CreateUserEmailRequest;
 }
 
 export interface ResetPasswordRequest {
@@ -63,11 +76,11 @@ export interface UserApiInterface {
      * @throws {RequiredError}
      * @memberof UserApiInterface
      */
-    applicationsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Application>>;
+    applicationsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Application>>>;
 
     /**
      */
-    applications(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Application>;
+    applications(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Application>>;
 
     /**
      * 
@@ -81,6 +94,19 @@ export interface UserApiInterface {
     /**
      */
     changeUsername(changeUsernameRequest: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @param {CreateUserEmailRequest} createUserEmailRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApiInterface
+     */
+    createEmailRaw(requestParameters: CreateEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Email>>;
+
+    /**
+     */
+    createEmail(createUserEmailRequest: CreateUserEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Email>;
 
     /**
      * 
@@ -145,6 +171,18 @@ export interface UserApiInterface {
      */
     setPrimaryEmail(emailId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApiInterface
+     */
+    usersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaginationUser>>;
+
+    /**
+     */
+    users(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaginationUser>;
+
 }
 
 /**
@@ -154,7 +192,7 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
 
     /**
      */
-    async applicationsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Application>> {
+    async applicationsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<Application>>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -174,12 +212,12 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ApplicationFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ApplicationFromJSON));
     }
 
     /**
      */
-    async applications(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Application> {
+    async applications(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<Application>> {
         const response = await this.applicationsRaw(initOverrides);
         return await response.value();
     }
@@ -220,6 +258,45 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
      */
     async changeUsername(changeUsernameRequest: ChangeUsernameRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.changeUsernameRaw({ changeUsernameRequest: changeUsernameRequest }, initOverrides);
+    }
+
+    /**
+     */
+    async createEmailRaw(requestParameters: CreateEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Email>> {
+        if (requestParameters.createUserEmailRequest === null || requestParameters.createUserEmailRequest === undefined) {
+            throw new runtime.RequiredError('createUserEmailRequest','Required parameter requestParameters.createUserEmailRequest was null or undefined when calling createEmail.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Authorization", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/users/email`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateUserEmailRequestToJSON(requestParameters.createUserEmailRequest),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => EmailFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async createEmail(createUserEmailRequest: CreateUserEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Email> {
+        const response = await this.createEmailRaw({ createUserEmailRequest: createUserEmailRequest }, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -401,6 +478,38 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
      */
     async setPrimaryEmail(emailId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.setPrimaryEmailRaw({ emailId: emailId }, initOverrides);
+    }
+
+    /**
+     */
+    async usersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaginationUser>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Authorization", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/users`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaginationUserFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async users(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaginationUser> {
+        const response = await this.usersRaw(initOverrides);
+        return await response.value();
     }
 
 }

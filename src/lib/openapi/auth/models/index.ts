@@ -2,9 +2,11 @@
 /* eslint-disable */
 export * from './Application';
 export * from './ChangeUsernameRequest';
+export * from './CreateUserEmailRequest';
 export * from './Email';
 export * from './Health';
 export * from './Message';
+export * from './PaginationUser';
 export * from './RequestResetPasswordRequest';
 export * from './ResetPasswordRequest';
 export * from './ResetUserPasswordRequest';

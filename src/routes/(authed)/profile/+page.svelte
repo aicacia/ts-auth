@@ -1,43 +1,27 @@
 <svelte:options immutable />
 
 <script lang="ts">
-	import type { User } from '$lib/openapi/auth';
+	import type { Application } from '$lib/openapi/auth';
 	import { user } from '$lib/stores/user';
-	import Emails from './_Emails.svelte';
-	import ResetPassword from './_ResetPassword.svelte';
-	import Username from './_Username.svelte';
+	import { onMount } from 'svelte';
+	import { userApi } from '$lib/openapi';
+	import { handleError } from '$lib/errors';
+	import Profile from '$lib/components/Profile/Profile.svelte';
 
-	$: currentUser = $user as User;
+	let applications: Application[] = [];
+	onMount(async () => {
+		try {
+			applications = await userApi.applications();
+		} catch (error) {
+			await handleError(error);
+		}
+	});
 </script>
 
 <svelte:head>
 	<title>Profile</title>
 </svelte:head>
 
-<div class="flex flex-col justify-end md:justify-start">
-	<div
-		class="flex flex-col flex-shrink mx-4 sm:container sm:mx-auto my-4 bg-white dark:bg-gray-800 shadow p-4"
-	>
-		<div class="mb-2">
-			<Username user={currentUser} username={currentUser.username} />
-		</div>
-	</div>
-</div>
-<div class="flex flex-col justify-end md:justify-start">
-	<div
-		class="flex flex-col flex-shrink mx-4 sm:container sm:mx-auto mb-4 bg-white dark:bg-gray-800 shadow p-4"
-	>
-		<div class="mb-2">
-			<Emails user={currentUser} />
-		</div>
-	</div>
-</div>
-<div class="flex flex-col justify-end md:justify-start">
-	<div
-		class="flex flex-col flex-shrink mx-4 sm:container sm:mx-auto mb-4 bg-white dark:bg-gray-800 shadow p-4"
-	>
-		<div class="mb-2">
-			<ResetPassword />
-		</div>
-	</div>
-</div>
+{#if $user}
+	<Profile user={$user} {applications} />
+{/if}

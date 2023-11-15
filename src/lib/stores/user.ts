@@ -114,6 +114,18 @@ export async function confirmEmail(emailId: number, confirmationToken: string) {
 	});
 }
 
+export async function createEmail(email: string) {
+	const newEmail = await userApi.createEmail({ email });
+	userWritable.update((user) => {
+		if (user) {
+			const newEmails = user.emails.slice();
+			newEmails.push(newEmail);
+			return { ...user, emails: newEmails };
+		}
+		return user;
+	});
+}
+
 let initialCall = true;
 export async function getCurrentUser() {
 	try {

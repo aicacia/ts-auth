@@ -23,7 +23,7 @@
 	use:clickoutside={{ event: 'mousedown' }}
 	on:clickoutside={onClickOutside}
 >
-	<button type="button" class="flex-grow btn icon primary" on:click={toggle}>
+	<button type="button" class="flex flex-shrink btn icon primary" on:click={toggle}>
 		<slot name="button" />
 	</button>
 	<Popup {anchor} {open}>
