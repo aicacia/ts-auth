@@ -6,6 +6,7 @@ export * from './CreateUserEmailRequest';
 export * from './Email';
 export * from './Health';
 export * from './Message';
+export * from './PaginationApplication';
 export * from './PaginationUser';
 export * from './RequestResetPasswordRequest';
 export * from './ResetPasswordRequest';

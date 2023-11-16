@@ -66,15 +66,13 @@
 </script>
 
 <div class="flex flex-row flex-grow items-center justify-between">
-	<div class="flex flex-grow">
-		<div class="relative">
-			<input type="email" value={email.email} readonly />
-			{#if email.confirmed}
-				<span class="absolute top-0 right-0 mt-1 me-1 text-green-600 cursor-help" title="Confirmed"
-					><CheckCircle2 size={22} /></span
-				>
-			{/if}
-		</div>
+	<div class="flex flex-grow relative">
+		<input class="w-full" type="email" value={email.email} readonly />
+		{#if email.confirmed}
+			<span class="absolute top-0 right-0 mt-1 me-1 text-green-600 cursor-help" title="Confirmed"
+				><CheckCircle2 size={22} /></span
+			>
+		{/if}
 	</div>
 	{#if !primary || !email.confirmed}
 		<div class="flex flex-shrink">

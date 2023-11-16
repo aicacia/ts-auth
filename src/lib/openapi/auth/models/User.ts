@@ -52,6 +52,12 @@ export interface User {
     id: number;
     /**
      * 
+     * @type {Array<string>}
+     * @memberof User
+     */
+    permissions: Array<string>;
+    /**
+     * 
      * @type {Date}
      * @memberof User
      */
@@ -72,6 +78,7 @@ export function instanceOfUser(value: object): boolean {
     isInstance = isInstance && "created_at" in value;
     isInstance = isInstance && "emails" in value;
     isInstance = isInstance && "id" in value;
+    isInstance = isInstance && "permissions" in value;
     isInstance = isInstance && "updated_at" in value;
     isInstance = isInstance && "username" in value;
 
@@ -92,6 +99,7 @@ export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User
         'email': !exists(json, 'email') ? undefined : EmailFromJSON(json['email']),
         'emails': ((json['emails'] as Array<any>).map(EmailFromJSON)),
         'id': json['id'],
+        'permissions': json['permissions'],
         'updated_at': (new Date(json['updated_at'])),
         'username': json['username'],
     };
@@ -110,6 +118,7 @@ export function UserToJSON(value?: User | null): any {
         'email': EmailToJSON(value.email),
         'emails': ((value.emails as Array<any>).map(EmailToJSON)),
         'id': value.id,
+        'permissions': value.permissions,
         'updated_at': (value.updated_at.toISOString()),
         'username': value.username,
     };

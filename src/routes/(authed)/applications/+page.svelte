@@ -6,11 +6,11 @@
 
 	export let data: PageData;
 
-	$: users = data.pagination.data;
+	$: applications = data.pagination.data;
 </script>
 
 <svelte:head>
-	<title>Users</title>
+	<title>Applications</title>
 </svelte:head>
 
 <div class="container mx-auto my-4">
@@ -19,21 +19,19 @@
 			<thead>
 				<tr class="text-left border-b">
 					<th class="">Id</th>
-					<th>Username</th>
-					<th>Email</th>
+					<th>Name</th>
 					<th>Created</th>
 					<th>Updated</th>
 					<th />
 				</tr>
 			</thead>
 			<tbody>
-				{#each users as user, index (user.id)}
-					<tr class="group" class:border-b={index < users.length - 1}>
-						<td>{user.id}</td>
-						<td>{user.username}</td>
-						<td>{user.email?.email || ''}</td>
-						<td>{user.created_at.toLocaleString()}</td>
-						<td>{user.updated_at.toLocaleString()}</td>
+				{#each applications as application, index (application.id)}
+					<tr class="group" class:border-b={index < applications.length - 1}>
+						<td>{application.id}</td>
+						<td>{application.name}</td>
+						<td>{application.created_at.toLocaleString()}</td>
+						<td>{application.updated_at.toLocaleString()}</td>
 						<td class="transition-opacity opacity-0 group-hover:opacity-100">
 							<button class="btn primary icon"><Pencil /></button>
 						</td>

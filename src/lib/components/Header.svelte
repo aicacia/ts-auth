@@ -11,6 +11,7 @@
 	import User from 'lucide-svelte/dist/svelte/icons/user.svelte';
 	import Users from 'lucide-svelte/dist/svelte/icons/users.svelte';
 	import LayoutDashboard from 'lucide-svelte/dist/svelte/icons/layout-dashboard.svelte';
+	import AppWindow from 'lucide-svelte/dist/svelte/icons/app-window.svelte';
 	import { page } from '$app/stores';
 
 	async function onSignOut() {
@@ -41,6 +42,14 @@
 						on:click={onGoto}
 					>
 						<LayoutDashboard /><span class="ms-4">Dashboard</span>
+					</a>
+					<a
+						href={`${base}/applications`}
+						class="default flex flex-row justify-between p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600"
+						class:active={$page.route.id === '/(authed)/applications'}
+						on:click={onGoto}
+					>
+						<AppWindow /><span class="ms-4">Applications</span>
 					</a>
 					<a
 						href={`${base}/users`}

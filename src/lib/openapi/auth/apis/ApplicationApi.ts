@@ -15,14 +15,14 @@
 
 import * as runtime from '../runtime';
 import type {
-  Application,
   Message,
+  PaginationApplication,
 } from '../models/index';
 import {
-    ApplicationFromJSON,
-    ApplicationToJSON,
     MessageFromJSON,
     MessageToJSON,
+    PaginationApplicationFromJSON,
+    PaginationApplicationToJSON,
 } from '../models/index';
 
 /**
@@ -38,11 +38,11 @@ export interface ApplicationApiInterface {
      * @throws {RequiredError}
      * @memberof ApplicationApiInterface
      */
-    indexRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Application>>;
+    indexRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaginationApplication>>;
 
     /**
      */
-    index(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Application>;
+    index(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaginationApplication>;
 
 }
 
@@ -53,7 +53,7 @@ export class ApplicationApi extends runtime.BaseAPI implements ApplicationApiInt
 
     /**
      */
-    async indexRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Application>> {
+    async indexRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaginationApplication>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -73,12 +73,12 @@ export class ApplicationApi extends runtime.BaseAPI implements ApplicationApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ApplicationFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaginationApplicationFromJSON(jsonValue));
     }
 
     /**
      */
-    async index(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Application> {
+    async index(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaginationApplication> {
         const response = await this.indexRaw(initOverrides);
         return await response.value();
     }
