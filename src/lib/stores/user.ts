@@ -96,6 +96,21 @@ export async function setPrimaryEmail(emailId: number) {
 	});
 }
 
+export async function deleteEmail(emailId: number) {
+	await userApi.deleteEmail(emailId);
+	userWritable.update((user) => {
+		if (user) {
+			const emailIndex = user.emails.findIndex((e) => e.id === emailId);
+			if (emailIndex !== -1) {
+				const newEmails = user.emails.slice();
+				newEmails.splice(emailIndex, 1);
+				return { ...user, emails: newEmails };
+			}
+		}
+		return user;
+	});
+}
+
 export async function confirmEmail(emailId: number, confirmationToken: string) {
 	await authApi.confirmEmail(confirmationToken);
 	userWritable.update((user) => {

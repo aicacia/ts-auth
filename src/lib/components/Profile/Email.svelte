@@ -7,31 +7,41 @@
 	import CheckCircle2 from 'lucide-svelte/dist/svelte/icons/check-circle-2.svelte';
 	import Send from 'lucide-svelte/dist/svelte/icons/send.svelte';
 	import Mail from 'lucide-svelte/dist/svelte/icons/mail.svelte';
-	import { setPrimaryEmail, confirmEmail } from '$lib/stores/user';
+	import Trash from 'lucide-svelte/dist/svelte/icons/trash.svelte';
 	import { userApi } from '$lib/openapi';
 	import { handleError } from '$lib/errors';
 	import { createNotification } from '$lib/stores/notifications';
 	import Modal from '$lib/components/Modal.svelte';
+	import { setPrimaryEmail, deleteEmail, confirmEmail } from '$lib/stores/user';
 
 	export let email: Email;
 	export let primary = false;
 
 	let open = false;
-	let sentEmailConfirmation = false;
-	let emailConfirmation: string;
 
-	async function setPrimary() {
+	async function onSetPrimary() {
 		try {
-			open = false;
 			await setPrimaryEmail(email.id);
+			open = false;
 		} catch (error) {
 			await handleError(error);
 		}
 	}
-	async function sendConfirmation() {
+	async function onDeleteEmail() {
 		try {
-			open = false;
+			await deleteEmail(email.id);
+			deleteEmailOpen = false;
+		} catch (error) {
+			await handleError(error);
+		}
+	}
+
+	let sentEmailConfirmation = false;
+	let emailConfirmation: string;
+	async function onSendConfirmation() {
+		try {
 			await userApi.sendConfirmationEmail(email.id);
+			open = false;
 			sentEmailConfirmation = true;
 			createNotification('sent_email_confirmation', 'info');
 		} catch (error) {
@@ -46,6 +56,12 @@
 		} catch (error) {
 			await handleError(error);
 		}
+	}
+
+	let deleteEmailOpen = false;
+	function onDeleteEmailOpen() {
+		deleteEmailOpen = true;
+		open = false;
 	}
 </script>
 
@@ -69,24 +85,32 @@
 				{#if !email.confirmed}
 					<li
 						class="flex flex-row justify-between p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600"
-						on:click={sendConfirmation}
+						on:click={onSendConfirmation}
 					>
 						<Mail /><span class="ms-4">Send Confirmation Email</span>
 					</li>
 				{:else}
 					<li
 						class="flex flex-row justify-between p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600"
-						on:click={setPrimary}
+						on:click={onSetPrimary}
 					>
 						<Send /><span class="ms-4">Set as Primary</span>
 					</li>
 				{/if}
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+				<li
+					class="flex flex-row justify-between p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600"
+					on:click={onDeleteEmailOpen}
+				>
+					<Trash /><span class="ms-4">Delete</span>
+				</li>
 			</Dropdown>
 		</div>
 	{/if}
 </div>
 
-<Modal open={sentEmailConfirmation}>
+<Modal bind:open={sentEmailConfirmation}>
 	<h4 slot="title">Check your Email</h4>
 	<form on:submit|preventDefault={onConfirmEmail}>
 		<div class="flex flex-col">
@@ -99,6 +123,15 @@
 		</div>
 		<div class="flex flex-row justify-end mt-2">
 			<button class="btn primary" type="submit">Confirm</button>
+		</div>
+	</form>
+</Modal>
+
+<Modal bind:open={deleteEmailOpen}>
+	<h4 slot="title">Delete {email.email}?</h4>
+	<form on:submit|preventDefault={onDeleteEmail}>
+		<div class="flex flex-row justify-end">
+			<button class="btn danger" type="submit">Delete</button>
 		</div>
 	</form>
 </Modal>

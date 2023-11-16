@@ -51,6 +51,10 @@ export interface CreateEmailRequest {
     createUserEmailRequest: CreateUserEmailRequest;
 }
 
+export interface DeleteEmailRequest {
+    emailId: number;
+}
+
 export interface ResetPasswordRequest {
     resetUserPasswordRequest: ResetUserPasswordRequest;
 }
@@ -119,6 +123,19 @@ export interface UserApiInterface {
     /**
      */
     current(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User>;
+
+    /**
+     * 
+     * @param {number} emailId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserApiInterface
+     */
+    deleteEmailRaw(requestParameters: DeleteEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     */
+    deleteEmail(emailId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -282,7 +299,7 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
             }
         }
         const response = await this.request({
-            path: `/users/email`,
+            path: `/users/emails`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
@@ -329,6 +346,41 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
     async current(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<User> {
         const response = await this.currentRaw(initOverrides);
         return await response.value();
+    }
+
+    /**
+     */
+    async deleteEmailRaw(requestParameters: DeleteEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.emailId === null || requestParameters.emailId === undefined) {
+            throw new runtime.RequiredError('emailId','Required parameter requestParameters.emailId was null or undefined when calling deleteEmail.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Authorization", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/users/emails/{email_id}`.replace(`{${"email_id"}}`, encodeURIComponent(String(requestParameters.emailId))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async deleteEmail(emailId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.deleteEmailRaw({ emailId: emailId }, initOverrides);
     }
 
     /**
@@ -465,7 +517,7 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
             }
         }
         const response = await this.request({
-            path: `/users/set-primary-email/{email_id}`.replace(`{${"email_id"}}`, encodeURIComponent(String(requestParameters.emailId))),
+            path: `/users/emails/{email_id}/set-primary-email`.replace(`{${"email_id"}}`, encodeURIComponent(String(requestParameters.emailId))),
             method: 'PUT',
             headers: headerParameters,
             query: queryParameters,

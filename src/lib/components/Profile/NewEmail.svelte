@@ -77,6 +77,7 @@
 			if (result.isValid()) {
 				await onCreate(email);
 				adding = false;
+				email = '';
 			}
 		} catch (error) {
 			await handleError(error);
@@ -87,35 +88,32 @@
 </script>
 
 <div class="flex flex-row flex-grow justify-end mt-4">
-	{#if adding}
-		<form class="flex flex-col flex-grow" on:submit|preventDefault={onSubmit}>
-			<div class="mb-2">
-				<input
-					class="w-full {cn('email')}"
-					type="email"
-					name="email"
-					autocomplete="email"
-					placeholder="New Email"
-					bind:value={email}
-					on:input={onChange}
-				/>
-				<InputResults name="email" {result} />
-			</div>
-			<div class="flex flex-row justify-end">
-				<button class="btn secondary flex flex-shrink" on:click={onCancelEmail} {disabled}>
-					Cancel
-				</button>
-				<button type="submit" class="btn primary flex flex-shrink" {disabled}>
-					{#if loading}<div class="flex flex-row justify-center mr-2">
-							<div class="inline-block w-6 h-6"><Spinner /></div>
-						</div>{/if}
-					Add
-				</button>
-			</div>
-		</form>
-	{:else}
-		<button class="btn primary icon" on:click={onAddEmail}>
-			<Plus />
-		</button>
-	{/if}
+	<form class="flex flex-col flex-grow" on:submit|preventDefault={onSubmit} class:hidden={!adding}>
+		<div class="mb-2">
+			<input
+				class="w-full {cn('email')}"
+				type="email"
+				name="email"
+				autocomplete="email"
+				placeholder="New Email"
+				bind:value={email}
+				on:input={onChange}
+			/>
+			<InputResults name="email" {result} />
+		</div>
+		<div class="flex flex-row justify-end">
+			<button class="btn secondary flex flex-shrink" on:click={onCancelEmail} {disabled}>
+				Cancel
+			</button>
+			<button type="submit" class="btn primary flex flex-shrink" {disabled}>
+				{#if loading}<div class="flex flex-row justify-center mr-2">
+						<div class="inline-block w-6 h-6"><Spinner /></div>
+					</div>{/if}
+				Add
+			</button>
+		</div>
+	</form>
+	<button class="btn primary icon" on:click={onAddEmail} class:hidden={adding}>
+		<Plus />
+	</button>
 </div>
