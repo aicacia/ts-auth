@@ -1,0 +1,1 @@
+import{r as e}from"../chunks/index.d7eb2526.js";import{b as o}from"../chunks/paths.b340fad0.js";const r=async t=>{throw e(302,`${o}/dashboard`)},n=Object.freeze(Object.defineProperty({__proto__:null,load:r},Symbol.toStringTag,{value:"Module"}));export{n as universal};
