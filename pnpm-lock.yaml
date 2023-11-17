@@ -11,6 +11,9 @@ dependencies:
   '@aicacia/rand':
     specifier: '0'
     version: 0.2.14(tslib@2.6.2)
+  '@aicacia/string-fuzzy_equals':
+    specifier: ^0.1.4
+    version: 0.1.4(tslib@2.6.2)
   '@svelte-put/clickoutside':
     specifier: '3'
     version: 3.0.0
@@ -149,6 +152,14 @@ packages:
       '@aicacia/hash': 0.2.2(tslib@2.6.2)
       '@aicacia/iter': 0.1.7(tslib@2.6.2)
       '@aicacia/option': 0.1.2(tslib@2.6.2)
+      tslib: 2.6.2
+    dev: false
+
+  /@aicacia/string-fuzzy_equals@0.1.4(tslib@2.6.2):
+    resolution: {integrity: sha512-jVGSLKJqZM4Zj5qFJbddF3D33+VYEuPGo0QkyRx0G6D7sD2yJ2WtoHSOf3xdCqOgddREiRc5VnPzdNxH8J1Iag==}
+    peerDependencies:
+      tslib: '2'
+    dependencies:
       tslib: 2.6.2
     dev: false
 

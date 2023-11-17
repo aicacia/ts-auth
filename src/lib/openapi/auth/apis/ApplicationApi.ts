@@ -15,15 +15,22 @@
 
 import * as runtime from '../runtime';
 import type {
+  Application,
   Message,
   PaginationApplication,
 } from '../models/index';
 import {
+    ApplicationFromJSON,
+    ApplicationToJSON,
     MessageFromJSON,
     MessageToJSON,
     PaginationApplicationFromJSON,
     PaginationApplicationToJSON,
 } from '../models/index';
+
+export interface ShowRequest {
+    applicationId: number;
+}
 
 /**
  * ApplicationApi - interface
@@ -43,6 +50,19 @@ export interface ApplicationApiInterface {
     /**
      */
     index(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaginationApplication>;
+
+    /**
+     * 
+     * @param {number} applicationId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApplicationApiInterface
+     */
+    showRaw(requestParameters: ShowRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Application>>;
+
+    /**
+     */
+    show(applicationId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Application>;
 
 }
 
@@ -80,6 +100,42 @@ export class ApplicationApi extends runtime.BaseAPI implements ApplicationApiInt
      */
     async index(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaginationApplication> {
         const response = await this.indexRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async showRaw(requestParameters: ShowRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Application>> {
+        if (requestParameters.applicationId === null || requestParameters.applicationId === undefined) {
+            throw new runtime.RequiredError('applicationId','Required parameter requestParameters.applicationId was null or undefined when calling show.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Authorization", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/applications/{application_id}`.replace(`{${"application_id"}}`, encodeURIComponent(String(requestParameters.applicationId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ApplicationFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async show(applicationId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Application> {
+        const response = await this.showRaw({ applicationId: applicationId }, initOverrides);
         return await response.value();
     }
 

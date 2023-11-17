@@ -1,12 +1,32 @@
 <svelte:options immutable />
 
+<script lang="ts" context="module">
+	import { writable } from 'svelte/store';
+
+	let search = writable('');
+</script>
+
 <script lang="ts">
+	import { base } from '$app/paths';
+	import { fuzzyEquals } from '@aicacia/string-fuzzy_equals';
 	import type { PageData } from './$types';
 	import Pencil from 'lucide-svelte/dist/svelte/icons/pencil.svelte';
+	import Plus from 'lucide-svelte/dist/svelte/icons/plus.svelte';
 
 	export let data: PageData;
 
+	let hasMore = data.pagination.has_more;
 	$: applications = data.pagination.data;
+
+	let filtered = new Set<number>();
+	$: filtered = $search.length
+		? applications.reduce((acc, a) => {
+				if (!fuzzyEquals($search, a.name)) {
+					acc.add(a.id);
+				}
+				return acc;
+		  }, new Set<number>())
+		: new Set<number>();
 </script>
 
 <svelte:head>
@@ -15,6 +35,11 @@
 
 <div class="container mx-auto my-4">
 	<div class="bg-white dark:bg-gray-800 shadow p-4">
+		<div class="flex flex-row flex-grow justify-between">
+			<input type="text" placeholder="Filter.." bind:value={$search} />
+			<button class="btn primary icon"><Plus /></button>
+		</div>
+		<hr class="my-1" />
 		<table class="table-auto w-full">
 			<thead>
 				<tr class="text-left border-b">
@@ -27,13 +52,19 @@
 			</thead>
 			<tbody>
 				{#each applications as application, index (application.id)}
-					<tr class="group" class:border-b={index < applications.length - 1}>
+					{@const hidden = filtered.has(application.id)}
+					<tr class="group" class:border-b={index < applications.length - 1} class:hidden>
 						<td>{application.id}</td>
 						<td>{application.name}</td>
 						<td>{application.created_at.toLocaleString()}</td>
 						<td>{application.updated_at.toLocaleString()}</td>
-						<td class="transition-opacity opacity-0 group-hover:opacity-100">
-							<button class="btn primary icon"><Pencil /></button>
+						<td
+							class="flex flex-row justify-end transition-opacity opacity-0 group-hover:opacity-100"
+						>
+							<a
+								class="btn primary icon inline-block"
+								href={`${base}/applications/${application.id}`}><Pencil /></a
+							>
 						</td>
 					</tr>
 				{/each}

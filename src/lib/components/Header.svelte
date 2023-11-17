@@ -52,20 +52,20 @@
 						<Users /><span class="ms-4">Users</span>
 					</a>
 					<a
-						href={`${base}/settings`}
-						class="default flex flex-row justify-between p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600"
-						class:active={$page.route.id === '/(authed)/settings'}
-						on:click={onGoto}
-					>
-						<Settings /><span class="ms-4">Settings</span>
-					</a>
-					<a
 						href={`${base}/profile`}
 						class="default flex flex-row justify-between p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600"
 						class:active={$page.route.id === '/(authed)/profile'}
 						on:click={onGoto}
 					>
 						<User /><span class="ms-4">Profile</span>
+					</a>
+					<a
+						href={`${base}/settings`}
+						class="default flex flex-row justify-between p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600"
+						class:active={$page.route.id === '/(authed)/settings'}
+						on:click={onGoto}
+					>
+						<Settings /><span class="ms-4">Settings</span>
 					</a>
 					<hr />
 					<!-- svelte-ignore a11y-click-events-have-key-events -->

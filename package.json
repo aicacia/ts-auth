@@ -50,6 +50,7 @@
 	"dependencies": {
 		"@aicacia/debounce": "0",
 		"@aicacia/rand": "0",
+		"@aicacia/string-fuzzy_equals": "^0.1.4",
 		"@svelte-put/clickoutside": "3",
 		"eventemitter3": "5",
 		"lucide-svelte": "0.269.0",
