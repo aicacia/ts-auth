@@ -50,9 +50,10 @@
 	"dependencies": {
 		"@aicacia/debounce": "0",
 		"@aicacia/rand": "0",
-		"@aicacia/string-fuzzy_equals": "^0.1.4",
+		"@aicacia/string-fuzzy_equals": "0",
 		"@svelte-put/clickoutside": "3",
 		"eventemitter3": "5",
+		"js-base64": "3",
 		"lucide-svelte": "0.269.0",
 		"svelte": "4",
 		"svelte-localstorage-writable": "0",

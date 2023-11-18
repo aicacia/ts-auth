@@ -1,0 +1,127 @@
+<svelte:options immutable />
+
+<script lang="ts" context="module">
+	import { create, test, enforce, only } from 'vest';
+
+	type ApplicationForm = {
+		name: string;
+		uri: string;
+	};
+
+	const createSuite = () =>
+		create((data: Partial<ApplicationForm> = {}, fields: string[]) => {
+			if (!fields.length) {
+				return;
+			}
+			only(fields);
+
+			test('name', 'required', () => {
+				enforce(data.name).isNotBlank();
+			});
+			test('uri', 'required', () => {
+				enforce(data.uri).isNotBlank();
+			});
+		});
+</script>
+
+<script lang="ts">
+	import classNames from 'vest/classnames';
+	import { handleError } from '$lib/errors';
+	import { debounce } from '@aicacia/debounce';
+	import InputResults from '$lib/components/InputResults.svelte';
+	import Spinner from '$lib/components/Spinner.svelte';
+	import { applicationApi } from '$lib/openapi';
+	import type { Application } from '$lib/openapi/auth';
+
+	export let id: number | undefined = undefined;
+	export let name: string = '';
+	export let uri: string = '';
+	export let onDone: (application: Application) => void;
+
+	const suite = createSuite();
+
+	let result = suite.get();
+	$: disabled = loading;
+	$: cn = classNames(result, {
+		untested: 'untested',
+		tested: 'tested',
+		invalid: 'invalid',
+		valid: 'valid',
+		warning: 'warning'
+	});
+
+	const fields = new Set<string>();
+	const validate = debounce(() => {
+		suite({ name, uri }, Array.from(fields)).done((r) => {
+			result = r;
+		});
+		fields.clear();
+	}, 300);
+	function validateAll() {
+		fields.add('name');
+		fields.add('uri');
+		validate();
+		validate.flush();
+	}
+	function onChange(e: Event & { currentTarget: HTMLInputElement | HTMLSelectElement }) {
+		fields.add(e.currentTarget.name);
+		validate();
+	}
+
+	let loading = false;
+	async function onSubmit() {
+		try {
+			loading = true;
+			validateAll();
+			if (result.isValid()) {
+				if (id == null) {
+					throw new Error('not_implemented');
+				}
+				const application = await applicationApi.update(id, { name, uri });
+				onDone(application);
+				suite.reset();
+			}
+		} catch (error) {
+			await handleError(error);
+		} finally {
+			loading = false;
+		}
+	}
+</script>
+
+<form class="flex flex-col flex-grow" on:submit|preventDefault={onSubmit}>
+	<div class="mb-2">
+		<label for="application-name">Name</label>
+		<input
+			id="application-name"
+			class="w-full {cn('name')}"
+			type="text"
+			name="name"
+			placeholder="Name"
+			bind:value={name}
+			on:input={onChange}
+		/>
+		<InputResults name="name" {result} />
+	</div>
+	<div class="mb-2">
+		<label for="application-uri">URL Safe Short Name</label>
+		<input
+			id="application-uri"
+			class="w-full {cn('uri')}"
+			type="text"
+			name="uri"
+			placeholder="URL Safe Short Name"
+			bind:value={uri}
+			on:input={onChange}
+		/>
+		<InputResults name="uri" {result} />
+	</div>
+	<div class="flex flex-row justify-end">
+		<button type="submit" class="btn primary flex flex-shrink" {disabled}>
+			{#if loading}<div class="flex flex-row justify-center mr-2">
+					<div class="inline-block w-6 h-6"><Spinner /></div>
+				</div>{/if}
+			{#if id == null}Create{:else}Update{/if}
+		</button>
+	</div>
+</form>

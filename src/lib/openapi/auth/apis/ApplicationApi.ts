@@ -16,20 +16,43 @@
 import * as runtime from '../runtime';
 import type {
   Application,
+  ApplicationConfig,
   Message,
   PaginationApplication,
+  UpdateApplicationConfigRequest,
+  UpdateApplicationRequest,
 } from '../models/index';
 import {
     ApplicationFromJSON,
     ApplicationToJSON,
+    ApplicationConfigFromJSON,
+    ApplicationConfigToJSON,
     MessageFromJSON,
     MessageToJSON,
     PaginationApplicationFromJSON,
     PaginationApplicationToJSON,
+    UpdateApplicationConfigRequestFromJSON,
+    UpdateApplicationConfigRequestToJSON,
+    UpdateApplicationRequestFromJSON,
+    UpdateApplicationRequestToJSON,
 } from '../models/index';
+
+export interface ConfigRequest {
+    applicationId: number;
+}
 
 export interface ShowRequest {
     applicationId: number;
+}
+
+export interface UpdateRequest {
+    applicationId: number;
+    updateApplicationRequest: UpdateApplicationRequest;
+}
+
+export interface UpdateConfigRequest {
+    applicationId: number;
+    updateApplicationConfigRequest: UpdateApplicationConfigRequest;
 }
 
 /**
@@ -39,6 +62,19 @@ export interface ShowRequest {
  * @interface ApplicationApiInterface
  */
 export interface ApplicationApiInterface {
+    /**
+     * 
+     * @param {number} applicationId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApplicationApiInterface
+     */
+    configRaw(requestParameters: ConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ApplicationConfig>>>;
+
+    /**
+     */
+    config(applicationId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ApplicationConfig>>;
+
     /**
      * 
      * @param {*} [options] Override http request option.
@@ -64,12 +100,76 @@ export interface ApplicationApiInterface {
      */
     show(applicationId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Application>;
 
+    /**
+     * 
+     * @param {number} applicationId 
+     * @param {UpdateApplicationRequest} updateApplicationRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApplicationApiInterface
+     */
+    updateRaw(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Application>>;
+
+    /**
+     */
+    update(applicationId: number, updateApplicationRequest: UpdateApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Application>;
+
+    /**
+     * 
+     * @param {number} applicationId 
+     * @param {UpdateApplicationConfigRequest} updateApplicationConfigRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApplicationApiInterface
+     */
+    updateConfigRaw(requestParameters: UpdateConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     */
+    updateConfig(applicationId: number, updateApplicationConfigRequest: UpdateApplicationConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
 }
 
 /**
  * 
  */
 export class ApplicationApi extends runtime.BaseAPI implements ApplicationApiInterface {
+
+    /**
+     */
+    async configRaw(requestParameters: ConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<ApplicationConfig>>> {
+        if (requestParameters.applicationId === null || requestParameters.applicationId === undefined) {
+            throw new runtime.RequiredError('applicationId','Required parameter requestParameters.applicationId was null or undefined when calling config.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Authorization", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/applications/{application_id}/config`.replace(`{${"application_id"}}`, encodeURIComponent(String(requestParameters.applicationId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(ApplicationConfigFromJSON));
+    }
+
+    /**
+     */
+    async config(applicationId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ApplicationConfig>> {
+        const response = await this.configRaw({ applicationId: applicationId }, initOverrides);
+        return await response.value();
+    }
 
     /**
      */
@@ -137,6 +237,91 @@ export class ApplicationApi extends runtime.BaseAPI implements ApplicationApiInt
     async show(applicationId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Application> {
         const response = await this.showRaw({ applicationId: applicationId }, initOverrides);
         return await response.value();
+    }
+
+    /**
+     */
+    async updateRaw(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Application>> {
+        if (requestParameters.applicationId === null || requestParameters.applicationId === undefined) {
+            throw new runtime.RequiredError('applicationId','Required parameter requestParameters.applicationId was null or undefined when calling update.');
+        }
+
+        if (requestParameters.updateApplicationRequest === null || requestParameters.updateApplicationRequest === undefined) {
+            throw new runtime.RequiredError('updateApplicationRequest','Required parameter requestParameters.updateApplicationRequest was null or undefined when calling update.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Authorization", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/applications/{application_id}`.replace(`{${"application_id"}}`, encodeURIComponent(String(requestParameters.applicationId))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateApplicationRequestToJSON(requestParameters.updateApplicationRequest),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ApplicationFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async update(applicationId: number, updateApplicationRequest: UpdateApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Application> {
+        const response = await this.updateRaw({ applicationId: applicationId, updateApplicationRequest: updateApplicationRequest }, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async updateConfigRaw(requestParameters: UpdateConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.applicationId === null || requestParameters.applicationId === undefined) {
+            throw new runtime.RequiredError('applicationId','Required parameter requestParameters.applicationId was null or undefined when calling updateConfig.');
+        }
+
+        if (requestParameters.updateApplicationConfigRequest === null || requestParameters.updateApplicationConfigRequest === undefined) {
+            throw new runtime.RequiredError('updateApplicationConfigRequest','Required parameter requestParameters.updateApplicationConfigRequest was null or undefined when calling updateConfig.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Authorization", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/applications/{application_id}/config`.replace(`{${"application_id"}}`, encodeURIComponent(String(requestParameters.applicationId))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+            body: UpdateApplicationConfigRequestToJSON(requestParameters.updateApplicationConfigRequest),
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async updateConfig(applicationId: number, updateApplicationConfigRequest: UpdateApplicationConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.updateConfigRaw({ applicationId: applicationId, updateApplicationConfigRequest: updateApplicationConfigRequest }, initOverrides);
     }
 
 }

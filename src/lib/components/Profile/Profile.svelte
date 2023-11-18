@@ -11,10 +11,6 @@
 	export let applications: Application[] = [];
 </script>
 
-<svelte:head>
-	<title>Profile</title>
-</svelte:head>
-
 <div class="flex flex-col justify-end md:justify-start px-4">
 	<div
 		class="flex flex-col flex-shrink w-full max-w-lg mx-auto my-4 bg-white dark:bg-gray-800 shadow p-4"

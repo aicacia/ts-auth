@@ -1,6 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 export * from './Application';
+export * from './ApplicationConfig';
+export * from './ApplicationPermission';
 export * from './ChangeUsernameRequest';
 export * from './CreateUserEmailRequest';
 export * from './Email';
@@ -14,5 +16,7 @@ export * from './ResetUserPasswordRequest';
 export * from './SignInWithPasswordRequest';
 export * from './SignUpMethods';
 export * from './SignUpWithPasswordRequest';
+export * from './UpdateApplicationConfigRequest';
+export * from './UpdateApplicationRequest';
 export * from './User';
 export * from './Version';

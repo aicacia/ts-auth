@@ -4,12 +4,12 @@ import { isOnline } from './online';
 import { authApi, getAccessToken, setAccessToken, userApi } from '$lib/openapi';
 import type { User } from '$lib/openapi/auth';
 import EventEmitter from 'eventemitter3';
-import { parseJWTClaims } from '$lib/util';
 
 const tokenWritable = localstorageWritable<string | null>('token', null);
 const userWritable = localstorageWritable<User | null>('user', null);
 export const user = derived(userWritable, (user) => user);
 export const signedIn = derived(userWritable, (user) => !!user);
+export const admin = derived(userWritable, (user) => user?.permissions.includes('admin') === true);
 
 const emitter = new EventEmitter<{ user: User }>();
 export function waitForUser() {
@@ -62,13 +62,6 @@ export function signOut() {
 	userWritable.set(null);
 	tokenWritable.set(null);
 	setAccessToken(undefined);
-}
-
-async function refreshToken() {
-	const newToken = await userApi.refreshToken();
-	setAccessToken(newToken);
-	tokenWritable.set(newToken);
-	return newToken;
 }
 
 export async function changeUsername(username: string) {
@@ -152,13 +145,6 @@ export async function getCurrentUser() {
 					setAccessToken(token);
 					user = await userApi.current();
 					userWritable.set(user);
-					const claims = parseJWTClaims(token);
-					const total = claims.exp - claims.iat;
-					const timeRemaining = claims.exp - Date.now() * 0.001;
-					const percent = (total - timeRemaining) / total;
-					if (percent > 0.5) {
-						refreshToken();
-					}
 					emitter.emit('user', user);
 				} else {
 					signOut();

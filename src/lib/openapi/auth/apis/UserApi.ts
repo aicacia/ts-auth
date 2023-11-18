@@ -139,18 +139,6 @@ export interface UserApiInterface {
 
     /**
      * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UserApiInterface
-     */
-    refreshTokenRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>>;
-
-    /**
-     */
-    refreshToken(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string>;
-
-    /**
-     * 
      * @param {ResetUserPasswordRequest} resetUserPasswordRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -381,42 +369,6 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
      */
     async deleteEmail(emailId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.deleteEmailRaw({ emailId: emailId }, initOverrides);
-    }
-
-    /**
-     */
-    async refreshTokenRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<string>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        if (this.configuration && this.configuration.accessToken) {
-            const token = this.configuration.accessToken;
-            const tokenString = await token("Authorization", []);
-
-            if (tokenString) {
-                headerParameters["Authorization"] = `Bearer ${tokenString}`;
-            }
-        }
-        const response = await this.request({
-            path: `/users/refresh-token`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        if (this.isJsonMime(response.headers.get('content-type'))) {
-            return new runtime.JSONApiResponse<string>(response);
-        } else {
-            return new runtime.TextApiResponse(response) as any;
-        }
-    }
-
-    /**
-     */
-    async refreshToken(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<string> {
-        const response = await this.refreshTokenRaw(initOverrides);
-        return await response.value();
     }
 
     /**

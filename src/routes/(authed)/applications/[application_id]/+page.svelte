@@ -2,20 +2,24 @@
 
 <script lang="ts">
 	import { base } from '$app/paths';
+	import Application from '$lib/components/Application/Application.svelte';
 	import type { PageData } from './$types';
 	import ArrowLeft from 'lucide-svelte/dist/svelte/icons/arrow-left.svelte';
 
 	export let data: PageData;
 
 	$: application = data.application;
+	$: configs = data.configs;
 </script>
 
 <svelte:head>
-	<title>Application ${application.name}</title>
+	<title>{application.name}</title>
 </svelte:head>
 
-<div class="container mx-auto my-4">
-	<div class="bg-white dark:bg-gray-800 shadow p-4">
+<div class="flex flex-col justify-end md:justify-start px-4">
+	<div
+		class="flex flex-col flex-shrink w-full max-w-6xl mx-auto mt-4 bg-white dark:bg-gray-800 shadow p-4"
+	>
 		<div class="flex flex-row">
 			<a class="btn icon primary me-2" href={`${base}/applications`}>
 				<ArrowLeft />
@@ -24,3 +28,5 @@
 		</div>
 	</div>
 </div>
+
+<Application bind:application bind:configs />
