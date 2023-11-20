@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   Application,
   ApplicationConfig,
+  CreateApplicationRequest,
   Message,
   PaginationApplication,
   UpdateApplicationConfigRequest,
@@ -27,6 +28,8 @@ import {
     ApplicationToJSON,
     ApplicationConfigFromJSON,
     ApplicationConfigToJSON,
+    CreateApplicationRequestFromJSON,
+    CreateApplicationRequestToJSON,
     MessageFromJSON,
     MessageToJSON,
     PaginationApplicationFromJSON,
@@ -39,6 +42,10 @@ import {
 
 export interface ConfigRequest {
     applicationId: number;
+}
+
+export interface CreateRequest {
+    createApplicationRequest: CreateApplicationRequest;
 }
 
 export interface ShowRequest {
@@ -74,6 +81,19 @@ export interface ApplicationApiInterface {
     /**
      */
     config(applicationId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ApplicationConfig>>;
+
+    /**
+     * 
+     * @param {CreateApplicationRequest} createApplicationRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApplicationApiInterface
+     */
+    createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Application>>;
+
+    /**
+     */
+    create(createApplicationRequest: CreateApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Application>;
 
     /**
      * 
@@ -168,6 +188,45 @@ export class ApplicationApi extends runtime.BaseAPI implements ApplicationApiInt
      */
     async config(applicationId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ApplicationConfig>> {
         const response = await this.configRaw({ applicationId: applicationId }, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Application>> {
+        if (requestParameters.createApplicationRequest === null || requestParameters.createApplicationRequest === undefined) {
+            throw new runtime.RequiredError('createApplicationRequest','Required parameter requestParameters.createApplicationRequest was null or undefined when calling create.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Authorization", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/applications`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: CreateApplicationRequestToJSON(requestParameters.createApplicationRequest),
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ApplicationFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async create(createApplicationRequest: CreateApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Application> {
+        const response = await this.createRaw({ createApplicationRequest: createApplicationRequest }, initOverrides);
         return await response.value();
     }
 

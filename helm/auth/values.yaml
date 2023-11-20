@@ -3,13 +3,13 @@ replicas:
   max: 8
   resource:
     cpu:
-      utilization: 60
+      utilization: 90
     memory:
       utilization: 90
   scaleDown:
     stabilizationWindowSeconds: 30
   scaleUp:
-    stabilizationWindowSeconds: 0
+    stabilizationWindowSeconds: 15
 
 image:
   repository: ghcr.io/aicacia/auth
@@ -34,8 +34,5 @@ ingress:
 
 resources:
   requests:
-    cpu: 15m
-    memory: 105M
-  limits:
-    cpu: 100m
-    memory: 256M
+    cpu: 80m
+    memory: 128M

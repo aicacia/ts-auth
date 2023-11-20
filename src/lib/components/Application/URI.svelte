@@ -86,7 +86,7 @@
 </script>
 
 <form class="flex flex-col flex-grow" on:submit|preventDefault={onSubmit}>
-	<label for="application-uri">URI</label>
+	<label for="uri">URI</label>
 	<div class="flex flex-row">
 		<div class="flex flex-shrink">
 			<button
@@ -99,7 +99,7 @@
 		</div>
 		<div class="flex flex-grow relative">
 			<input
-				id="application-uri"
+				id="uri"
 				class="flex flex-grow {cn('uri')}"
 				type="text"
 				name="uri"

@@ -1,9 +1,11 @@
 import { derived, get } from 'svelte/store';
 import { localstorageWritable } from 'svelte-localstorage-writable';
 import { isOnline } from './online';
-import { authApi, getAccessToken, setAccessToken, userApi } from '$lib/openapi';
+import { authApi, authConfiguration, getAccessToken, setAccessToken, userApi } from '$lib/openapi';
 import type { User } from '$lib/openapi/auth';
 import EventEmitter from 'eventemitter3';
+import { goto } from '$app/navigation';
+import { base } from '$app/paths';
 
 const tokenWritable = localstorageWritable<string | null>('token', null);
 const userWritable = localstorageWritable<User | null>('user', null);
@@ -162,3 +164,12 @@ export async function getCurrentUser() {
 		return null;
 	}
 }
+
+authConfiguration.middleware?.push({
+	async post(context) {
+		if (context.response.status === 401) {
+			signOut();
+			await goto(`${base}/signin`);
+		}
+	}
+});

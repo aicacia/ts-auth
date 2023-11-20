@@ -33,6 +33,9 @@
 	import RotateCCW from 'lucide-svelte/dist/svelte/icons/rotate-ccw.svelte';
 	import { fromUint8Array } from 'js-base64';
 	import { fillBytes } from '@aicacia/rand';
+	import { createNotification } from '$lib/stores/notifications';
+	import { goto } from '$app/navigation';
+	import { base } from '$app/paths';
 
 	export let id: number;
 	export let jwt: string = '';
@@ -90,6 +93,7 @@
 				await applicationApi.updateConfig(id, { key: 'jwt.secret', value: jwt });
 				initialUri = jwt;
 				suite.reset();
+				createNotification('invalidated_jwt', 'info');
 			}
 		} catch (error) {
 			await handleError(error);

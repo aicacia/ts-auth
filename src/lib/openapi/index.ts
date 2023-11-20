@@ -8,7 +8,7 @@ import {
 } from './auth';
 import { PUBLIC_AUTH_API_URL } from '$env/static/public';
 
-export const defaultConfiguration: ConfigurationParameters = {
+const defaultConfiguration: ConfigurationParameters = {
 	middleware: [
 		{
 			pre: async (context) => ({ ...context, init: { ...context.init, mode: 'cors' } })
@@ -17,7 +17,7 @@ export const defaultConfiguration: ConfigurationParameters = {
 	credentials: 'same-origin'
 };
 
-export const defaultAuthConfiguration: ConfigurationParameters = {
+const defaultAuthConfiguration: ConfigurationParameters = {
 	...defaultConfiguration,
 	basePath: typeof __DEV_AUTH_API_URL__ !== 'undefined' ? __DEV_AUTH_API_URL__ : PUBLIC_AUTH_API_URL
 };

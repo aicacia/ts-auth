@@ -39,12 +39,6 @@ export interface ApplicationConfig {
     key: string;
     /**
      * 
-     * @type {string}
-     * @memberof ApplicationConfig
-     */
-    name: string;
-    /**
-     * 
      * @type {Date}
      * @memberof ApplicationConfig
      */
@@ -65,7 +59,6 @@ export function instanceOfApplicationConfig(value: object): boolean {
     isInstance = isInstance && "application_id" in value;
     isInstance = isInstance && "created_at" in value;
     isInstance = isInstance && "key" in value;
-    isInstance = isInstance && "name" in value;
     isInstance = isInstance && "updated_at" in value;
     isInstance = isInstance && "value" in value;
 
@@ -85,7 +78,6 @@ export function ApplicationConfigFromJSONTyped(json: any, ignoreDiscriminator: b
         'application_id': json['application_id'],
         'created_at': (new Date(json['created_at'])),
         'key': json['key'],
-        'name': json['name'],
         'updated_at': (new Date(json['updated_at'])),
         'value': json['value'],
     };
@@ -103,7 +95,6 @@ export function ApplicationConfigToJSON(value?: ApplicationConfig | null): any {
         'application_id': value.application_id,
         'created_at': (value.created_at.toISOString()),
         'key': value.key,
-        'name': value.name,
         'updated_at': (value.updated_at.toISOString()),
         'value': value.value,
     };

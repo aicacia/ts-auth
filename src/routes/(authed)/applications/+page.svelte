@@ -12,6 +12,9 @@
 	import type { PageData } from './$types';
 	import Pencil from 'lucide-svelte/dist/svelte/icons/pencil.svelte';
 	import Plus from 'lucide-svelte/dist/svelte/icons/plus.svelte';
+	import Modal from '$lib/components/Modal.svelte';
+	import ApplicationEditor from '$lib/components/Application/ApplicationEditor.svelte';
+	import type { Application } from '$lib/openapi/auth';
 
 	export let data: PageData;
 
@@ -27,6 +30,15 @@
 				return acc;
 		  }, new Set<number>())
 		: new Set<number>();
+
+	let addOpen = false;
+	function onAddOpen() {
+		addOpen = true;
+	}
+
+	function onCreateAppliction(application: Application) {
+		applications = [application, ...applications];
+	}
 </script>
 
 <svelte:head>
@@ -37,7 +49,7 @@
 	<div class="bg-white dark:bg-gray-800 shadow p-4">
 		<div class="flex flex-row flex-grow justify-between">
 			<input type="text" placeholder="Filter.." bind:value={$search} />
-			<button class="btn primary icon"><Plus /></button>
+			<button class="btn primary icon" on:click={onAddOpen}><Plus /></button>
 		</div>
 		<hr class="my-1" />
 		<table class="table-auto w-full">
@@ -72,3 +84,8 @@
 		</table>
 	</div>
 </div>
+
+<Modal bind:open={addOpen}>
+	<h4 slot="title">Create Application</h4>
+	<ApplicationEditor onDone={onCreateAppliction} />
+</Modal>

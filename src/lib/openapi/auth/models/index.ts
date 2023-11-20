@@ -4,6 +4,7 @@ export * from './Application';
 export * from './ApplicationConfig';
 export * from './ApplicationPermission';
 export * from './ChangeUsernameRequest';
+export * from './CreateApplicationRequest';
 export * from './CreateUserEmailRequest';
 export * from './Email';
 export * from './Health';

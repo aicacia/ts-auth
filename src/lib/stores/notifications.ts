@@ -28,7 +28,9 @@ export function createNotification(
 			type
 		}
 	]);
-	setTimeout(() => removeNotification(id), deleteAfterMS);
+	if (deleteAfterMS > 0) {
+		setTimeout(() => removeNotification(id), deleteAfterMS);
+	}
 	return id;
 }
 

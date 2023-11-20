@@ -32,6 +32,9 @@
 	import Spinner from '$lib/components/Spinner.svelte';
 	import { applicationApi } from '$lib/openapi';
 	import type { Application } from '$lib/openapi/auth';
+	import { toURLSafe } from '$lib/util';
+	import { invalidate } from '$app/navigation';
+	import { base } from '$app/paths';
 
 	export let id: number | undefined = undefined;
 	export let name: string = '';
@@ -67,6 +70,14 @@
 		fields.add(e.currentTarget.name);
 		validate();
 	}
+	function onNameChange(e: Event & { currentTarget: HTMLInputElement | HTMLSelectElement }) {
+		uri = toURLSafe(name);
+		onChange(e);
+	}
+	function onURIChange(e: Event & { currentTarget: HTMLInputElement | HTMLSelectElement }) {
+		uri = toURLSafe(uri);
+		onChange(e);
+	}
 
 	let loading = false;
 	async function onSubmit() {
@@ -74,10 +85,13 @@
 			loading = true;
 			validateAll();
 			if (result.isValid()) {
+				const application =
+					id == null
+						? await applicationApi.create({ name, uri })
+						: await applicationApi.update(id, { name, uri });
 				if (id == null) {
-					throw new Error('not_implemented');
+					await invalidate(`${base}/applications`);
 				}
-				const application = await applicationApi.update(id, { name, uri });
 				onDone(application);
 				suite.reset();
 			}
@@ -99,7 +113,7 @@
 			name="name"
 			placeholder="Name"
 			bind:value={name}
-			on:input={onChange}
+			on:input={onNameChange}
 		/>
 		<InputResults name="name" {result} />
 	</div>
@@ -112,7 +126,7 @@
 			name="uri"
 			placeholder="URL Safe Short Name"
 			bind:value={uri}
-			on:input={onChange}
+			on:input={onURIChange}
 		/>
 		<InputResults name="uri" {result} />
 	</div>

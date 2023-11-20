@@ -24,6 +24,14 @@ export function getSearchTerms(search: string): string[] {
 		.filter((t) => !!t);
 }
 
+export function toURLSafe(value: string): string {
+	return value
+		.trim()
+		.toLowerCase()
+		.replace(/[\s]+/gi, '-')
+		.replace(/[^\w\d\-_]+/gi, '');
+}
+
 export function getId<T extends { id: number }>(value: T) {
 	return value.id;
 }
