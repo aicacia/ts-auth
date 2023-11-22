@@ -1,4 +1,5 @@
 import { browser } from '$app/environment';
+import { PUBLIC_APPLICATION_ID } from '$env/static/public';
 import { handleError } from '$lib/errors';
 import { authApi } from '$lib/openapi';
 import type { SignUpMethods } from '$lib/openapi/auth';
@@ -24,7 +25,7 @@ export function waitForSignUpMethods() {
 
 async function fetchSignUpMethods() {
 	try {
-		const signUpMethods = await authApi.signUpMethods(1);
+		const signUpMethods = await authApi.signUpMethods(+PUBLIC_APPLICATION_ID);
 		signUpMethodsWritable.set(signUpMethods);
 		signUpMethodsLoaded = true;
 		emitter.emit('signUpMethods', signUpMethods);

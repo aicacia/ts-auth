@@ -10,8 +10,6 @@
 
 	$: application = data.application;
 	$: configs = data.configs;
-
-	$: console.log(configs);
 </script>
 
 <svelte:head>

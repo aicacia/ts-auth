@@ -6,6 +6,7 @@ import type { User } from '$lib/openapi/auth';
 import EventEmitter from 'eventemitter3';
 import { goto } from '$app/navigation';
 import { base } from '$app/paths';
+import { PUBLIC_APPLICATION_ID } from '$env/static/public';
 
 const tokenWritable = localstorageWritable<string | null>('token', null);
 const userWritable = localstorageWritable<User | null>('user', null);
@@ -42,7 +43,7 @@ export async function signUp(
 	email: string
 ) {
 	const token = await authApi.signUpWithPassword({
-		application_id: 1,
+		application_id: +PUBLIC_APPLICATION_ID,
 		username,
 		email,
 		password,

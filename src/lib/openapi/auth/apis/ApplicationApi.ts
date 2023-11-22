@@ -48,6 +48,10 @@ export interface CreateRequest {
     createApplicationRequest: CreateApplicationRequest;
 }
 
+export interface RemoveRequest {
+    applicationId: number;
+}
+
 export interface ShowRequest {
     applicationId: number;
 }
@@ -106,6 +110,19 @@ export interface ApplicationApiInterface {
     /**
      */
     index(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaginationApplication>;
+
+    /**
+     * 
+     * @param {number} applicationId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApplicationApiInterface
+     */
+    removeRaw(requestParameters: RemoveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+
+    /**
+     */
+    remove(applicationId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
@@ -260,6 +277,41 @@ export class ApplicationApi extends runtime.BaseAPI implements ApplicationApiInt
     async index(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaginationApplication> {
         const response = await this.indexRaw(initOverrides);
         return await response.value();
+    }
+
+    /**
+     */
+    async removeRaw(requestParameters: RemoveRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+        if (requestParameters.applicationId === null || requestParameters.applicationId === undefined) {
+            throw new runtime.RequiredError('applicationId','Required parameter requestParameters.applicationId was null or undefined when calling remove.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Authorization", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/applications/{application_id}`.replace(`{${"application_id"}}`, encodeURIComponent(String(requestParameters.applicationId))),
+            method: 'DELETE',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     */
+    async remove(applicationId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+        await this.removeRaw({ applicationId: applicationId }, initOverrides);
     }
 
     /**

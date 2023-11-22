@@ -38,6 +38,7 @@
 
 	function onCreateAppliction(application: Application) {
 		applications = [application, ...applications];
+		addOpen = false;
 	}
 </script>
 
@@ -57,6 +58,7 @@
 				<tr class="text-left border-b">
 					<th class="">Id</th>
 					<th>Name</th>
+					<th>URI</th>
 					<th>Created</th>
 					<th>Updated</th>
 					<th />
@@ -68,6 +70,7 @@
 					<tr class="group" class:border-b={index < applications.length - 1} class:hidden>
 						<td>{application.id}</td>
 						<td>{application.name}</td>
+						<td>{application.uri}</td>
 						<td>{application.created_at.toLocaleString()}</td>
 						<td>{application.updated_at.toLocaleString()}</td>
 						<td

@@ -2,7 +2,6 @@ import { derived, writable } from 'svelte/store';
 
 const nowWritable = writable(Date.now());
 export const now = derived(nowWritable, (now) => now);
-export const nextWeek = derived(nowWritable, (now) => now + 604800000);
 
 let lastMS = Date.now();
 let offsetMS = 0;

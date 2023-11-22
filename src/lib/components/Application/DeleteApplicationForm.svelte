@@ -5,6 +5,7 @@
 
 	type URIForm = {
 		uri: string;
+		originalUri: string;
 	};
 
 	const createSuite = () =>
@@ -17,6 +18,9 @@
 			test('uri', 'required', () => {
 				enforce(data.uri).isNotBlank();
 			});
+			test('uri', 'mismatch', () => {
+				enforce(data.uri).equals(data.originalUri);
+			});
 		});
 </script>
 
@@ -27,12 +31,12 @@
 	import InputResults from '$lib/components/InputResults.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import { applicationApi } from '$lib/openapi';
-	import Undo from 'lucide-svelte/dist/svelte/icons/undo-2.svelte';
+	import { goto, invalidate } from '$app/navigation';
+	import { base } from '$app/paths';
 
 	export let id: number;
-	export let uri: string = '';
+	export let originalUri: string;
 
-	let initialUri = uri;
 	const suite = createSuite();
 
 	let result = suite.get();
@@ -45,9 +49,11 @@
 		warning: 'warning'
 	});
 
+	let uri = '';
+
 	const fields = new Set<string>();
 	const validate = debounce(() => {
-		suite({ uri }, Array.from(fields)).done((r) => {
+		suite({ uri, originalUri }, Array.from(fields)).done((r) => {
 			result = r;
 		});
 		fields.clear();
@@ -62,20 +68,15 @@
 		validate();
 	}
 
-	function onReset() {
-		uri = initialUri;
-		suite.reset();
-	}
-
 	let loading = false;
 	async function onSubmit() {
 		try {
 			loading = true;
 			validateAll();
 			if (result.isValid()) {
-				await applicationApi.updateConfig(id, { key: 'uri', value: uri });
-				initialUri = uri;
-				suite.reset();
+				await applicationApi.remove(id);
+				await invalidate(`${base}/applications`);
+				await goto(`${base}/applications`);
 			}
 		} catch (error) {
 			await handleError(error);
@@ -86,17 +87,8 @@
 </script>
 
 <form class="flex flex-col flex-grow" on:submit|preventDefault={onSubmit}>
-	<label for="uri">URI</label>
+	<label for="uri">Enter `{originalUri}` to confirm delete.</label>
 	<div class="flex flex-row">
-		<div class="flex flex-shrink">
-			<button
-				type="submit"
-				class="btn icon secondary flex flex-shrink"
-				on:click|preventDefault={onReset}
-			>
-				<Undo />
-			</button>
-		</div>
 		<div class="flex flex-grow relative">
 			<input
 				id="uri"
@@ -109,11 +101,11 @@
 			/>
 		</div>
 		<div class="flex flex-shrink">
-			<button type="submit" class="btn primary flex flex-shrink" {disabled}>
+			<button type="submit" class="btn danger flex flex-shrink" {disabled}>
 				{#if loading}<div class="flex flex-row justify-center mr-2">
 						<div class="inline-block w-6 h-6"><Spinner /></div>
 					</div>{/if}
-				Update
+				Delete
 			</button>
 		</div>
 	</div>
