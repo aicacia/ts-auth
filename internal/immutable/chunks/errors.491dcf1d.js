@@ -1,1 +1,0 @@
-import{R as e}from"./index.480a3f55.js";import{a as r}from"./notifications.f5ca8515.js";async function f(o){if(o instanceof e){const s=await o.response.json();if(s)return a(s),s}throw console.error(o),r("Application Error, if it presists please contact support."),o}async function a(o){for(const[s,t]of Object.entries(o))for(const n of t)r(`${s}: ${n.key}`)}export{f as h};
