@@ -7,7 +7,6 @@
 	import { admin, signOut, signedIn } from '$lib/stores/user';
 	import LogOut from 'lucide-svelte/dist/svelte/icons/log-out.svelte';
 	import Menu from 'lucide-svelte/dist/svelte/icons/menu.svelte';
-	import Settings from 'lucide-svelte/dist/svelte/icons/settings.svelte';
 	import User from 'lucide-svelte/dist/svelte/icons/user.svelte';
 	import Users from 'lucide-svelte/dist/svelte/icons/users.svelte';
 	import AppWindow from 'lucide-svelte/dist/svelte/icons/app-window.svelte';

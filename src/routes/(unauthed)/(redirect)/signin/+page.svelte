@@ -33,7 +33,6 @@
 	import { handleError } from '$lib/errors';
 	import { debounce } from '@aicacia/debounce';
 	import InputResults from '$lib/components/InputResults.svelte';
-	import { signUpMethods } from '$lib/stores/system';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
