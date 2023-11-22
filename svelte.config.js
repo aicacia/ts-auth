@@ -11,6 +11,9 @@ const config = {
 			fallback: 'index.html',
 			precompress: false
 		}),
+		paths: {
+			base: process.env.USE_BASE_PATH ? '/ts-auth' : ''
+		},
 		appDir: 'internal'
 	}
 };
