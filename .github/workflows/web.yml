@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PUBLIC_AUTH_API_URL: https://api.auth.aicacia.com
+      PUBLIC_APPLICATION_ID: 1
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
@@ -16,7 +17,7 @@ jobs:
           node-version: 20
 
       - run: npm install -g pnpm@8
-      - run: npm install
+      - run: pnpm install
       - run: NODE_ENV=production pnpm run build
 
       - uses: peaceiris/actions-gh-pages@v3
