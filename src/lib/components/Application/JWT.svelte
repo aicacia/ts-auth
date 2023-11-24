@@ -34,10 +34,8 @@
 	import { fromUint8Array } from 'js-base64';
 	import { fillBytes } from '@aicacia/rand';
 	import { createNotification } from '$lib/stores/notifications';
-	import { goto } from '$app/navigation';
-	import { base } from '$app/paths';
 
-	export let id: number;
+	export let id: string;
 	export let jwt: string = '';
 
 	let initialUri = jwt;

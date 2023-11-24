@@ -54,7 +54,7 @@ export interface SignInWithPasswordOperationRequest {
 }
 
 export interface SignUpMethodsRequest {
-    applicationId: number;
+    applicationId: string;
 }
 
 export interface SignUpWithPasswordOperationRequest {
@@ -122,7 +122,7 @@ export interface AuthApiInterface {
 
     /**
      * 
-     * @param {number} applicationId 
+     * @param {string} applicationId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthApiInterface
@@ -131,7 +131,7 @@ export interface AuthApiInterface {
 
     /**
      */
-    signUpMethods(applicationId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SignUpMethods>;
+    signUpMethods(applicationId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SignUpMethods>;
 
     /**
      * 
@@ -311,7 +311,7 @@ export class AuthApi extends runtime.BaseAPI implements AuthApiInterface {
 
     /**
      */
-    async signUpMethods(applicationId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SignUpMethods> {
+    async signUpMethods(applicationId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SignUpMethods> {
         const response = await this.signUpMethodsRaw({ applicationId: applicationId }, initOverrides);
         return await response.value();
     }

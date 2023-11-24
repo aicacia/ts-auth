@@ -1,8 +1,7 @@
 import { browser } from '$app/environment';
-import { derived, get } from 'svelte/store';
-import { localstorageWritable } from 'svelte-localstorage-writable';
+import { derived, writable, get } from 'svelte/store';
 
-const localeWritable = localstorageWritable('locale', browser ? navigator.language : 'en-US');
+const localeWritable = writable(browser ? navigator.language : 'en-US');
 
 export const locale = derived(localeWritable, (state) => state);
 

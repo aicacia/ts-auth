@@ -21,10 +21,10 @@ import { exists, mapValues } from '../runtime';
 export interface SignInWithPasswordRequest {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof SignInWithPasswordRequest
      */
-    application_id: number;
+    application_id: string;
     /**
      * 
      * @type {string}

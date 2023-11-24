@@ -21,10 +21,10 @@ import { exists, mapValues } from '../runtime';
 export interface ApplicationPermission {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof ApplicationPermission
      */
-    application_id: number;
+    application_id: string;
     /**
      * 
      * @type {Date}

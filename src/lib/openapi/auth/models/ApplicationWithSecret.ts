@@ -16,60 +16,67 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface Application
+ * @interface ApplicationWithSecret
  */
-export interface Application {
+export interface ApplicationWithSecret {
     /**
      * 
      * @type {Date}
-     * @memberof Application
+     * @memberof ApplicationWithSecret
      */
     created_at: Date;
     /**
      * 
      * @type {string}
-     * @memberof Application
+     * @memberof ApplicationWithSecret
      */
     id: string;
     /**
      * 
      * @type {string}
-     * @memberof Application
+     * @memberof ApplicationWithSecret
      */
     name: string;
     /**
      * 
+     * @type {string}
+     * @memberof ApplicationWithSecret
+     */
+    secret: string;
+    /**
+     * 
      * @type {Date}
-     * @memberof Application
+     * @memberof ApplicationWithSecret
      */
     updated_at: Date;
     /**
      * 
      * @type {string}
-     * @memberof Application
+     * @memberof ApplicationWithSecret
      */
     uri: string;
 }
 
 /**
- * Check if a given object implements the Application interface.
+ * Check if a given object implements the ApplicationWithSecret interface.
  */
-export function instanceOfApplication(value: object): boolean {
+export function instanceOfApplicationWithSecret(value: object): boolean {
     let isInstance = true;
     isInstance = isInstance && "created_at" in value;
     isInstance = isInstance && "id" in value;
     isInstance = isInstance && "name" in value;
+    isInstance = isInstance && "secret" in value;
     isInstance = isInstance && "updated_at" in value;
     isInstance = isInstance && "uri" in value;
 
     return isInstance;
 }
 
-export function ApplicationFromJSON(json: any): Application {
-    return ApplicationFromJSONTyped(json, false);
+export function ApplicationWithSecretFromJSON(json: any): ApplicationWithSecret {
+    return ApplicationWithSecretFromJSONTyped(json, false);
 }
 
-export function ApplicationFromJSONTyped(json: any, ignoreDiscriminator: boolean): Application {
+export function ApplicationWithSecretFromJSONTyped(json: any, ignoreDiscriminator: boolean): ApplicationWithSecret {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -78,12 +85,13 @@ export function ApplicationFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'created_at': (new Date(json['created_at'])),
         'id': json['id'],
         'name': json['name'],
+        'secret': json['secret'],
         'updated_at': (new Date(json['updated_at'])),
         'uri': json['uri'],
     };
 }
 
-export function ApplicationToJSON(value?: Application | null): any {
+export function ApplicationWithSecretToJSON(value?: ApplicationWithSecret | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -95,6 +103,7 @@ export function ApplicationToJSON(value?: Application | null): any {
         'created_at': (value.created_at.toISOString()),
         'id': value.id,
         'name': value.name,
+        'secret': value.secret,
         'updated_at': (value.updated_at.toISOString()),
         'uri': value.uri,
     };

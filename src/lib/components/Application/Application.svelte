@@ -2,7 +2,7 @@
 
 <script lang="ts" context="module">
 	function createApplicationConfig(
-		applicationId: number,
+		applicationId: string,
 		key: string,
 		value?: any
 	): ApplicationConfig {
@@ -17,14 +17,14 @@
 </script>
 
 <script lang="ts">
-	import type { Application } from '$lib/openapi/auth';
+	import type { ApplicationWithSecret } from '$lib/openapi/auth';
 	import type { ApplicationConfig } from '$lib/openapi/auth/models/ApplicationConfig';
 	import ApplicationEditor from './ApplicationEditor.svelte';
 	import DeleteApplication from './DeleteApplication.svelte';
 	import JWT from './JWT.svelte';
 	import URI from './URI.svelte';
 
-	export let application: Application;
+	export let application: ApplicationWithSecret;
 	export let configs: { [key: string]: ApplicationConfig };
 
 	$: uri = configs['uri'] || (configs['uri'] = createApplicationConfig(application.id, 'uri'));
@@ -32,7 +32,7 @@
 		configs['jwt.secret'] ||
 		(configs['jwt.secret'] = createApplicationConfig(application.id, 'uri'));
 
-	function onUpdate(updatedApplication: Application) {
+	function onUpdate(updatedApplication: ApplicationWithSecret) {
 		application = updatedApplication;
 	}
 </script>

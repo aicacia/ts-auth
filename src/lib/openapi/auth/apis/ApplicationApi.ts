@@ -15,25 +15,25 @@
 
 import * as runtime from '../runtime';
 import type {
-  Application,
   ApplicationConfig,
+  ApplicationWithSecret,
   CreateApplicationRequest,
   Message,
-  PaginationApplication,
+  PaginationApplicationWithSecret,
   UpdateApplicationConfigRequest,
   UpdateApplicationRequest,
 } from '../models/index';
 import {
-    ApplicationFromJSON,
-    ApplicationToJSON,
     ApplicationConfigFromJSON,
     ApplicationConfigToJSON,
+    ApplicationWithSecretFromJSON,
+    ApplicationWithSecretToJSON,
     CreateApplicationRequestFromJSON,
     CreateApplicationRequestToJSON,
     MessageFromJSON,
     MessageToJSON,
-    PaginationApplicationFromJSON,
-    PaginationApplicationToJSON,
+    PaginationApplicationWithSecretFromJSON,
+    PaginationApplicationWithSecretToJSON,
     UpdateApplicationConfigRequestFromJSON,
     UpdateApplicationConfigRequestToJSON,
     UpdateApplicationRequestFromJSON,
@@ -41,7 +41,7 @@ import {
 } from '../models/index';
 
 export interface ConfigRequest {
-    applicationId: number;
+    applicationId: string;
 }
 
 export interface CreateRequest {
@@ -49,20 +49,20 @@ export interface CreateRequest {
 }
 
 export interface RemoveRequest {
-    applicationId: number;
+    applicationId: string;
 }
 
 export interface ShowRequest {
-    applicationId: number;
+    applicationId: string;
 }
 
 export interface UpdateRequest {
-    applicationId: number;
+    applicationId: string;
     updateApplicationRequest: UpdateApplicationRequest;
 }
 
 export interface UpdateConfigRequest {
-    applicationId: number;
+    applicationId: string;
     updateApplicationConfigRequest: UpdateApplicationConfigRequest;
 }
 
@@ -75,7 +75,7 @@ export interface UpdateConfigRequest {
 export interface ApplicationApiInterface {
     /**
      * 
-     * @param {number} applicationId 
+     * @param {string} applicationId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ApplicationApiInterface
@@ -84,7 +84,7 @@ export interface ApplicationApiInterface {
 
     /**
      */
-    config(applicationId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ApplicationConfig>>;
+    config(applicationId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ApplicationConfig>>;
 
     /**
      * 
@@ -93,11 +93,11 @@ export interface ApplicationApiInterface {
      * @throws {RequiredError}
      * @memberof ApplicationApiInterface
      */
-    createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Application>>;
+    createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ApplicationWithSecret>>;
 
     /**
      */
-    create(createApplicationRequest: CreateApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Application>;
+    create(createApplicationRequest: CreateApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ApplicationWithSecret>;
 
     /**
      * 
@@ -105,15 +105,15 @@ export interface ApplicationApiInterface {
      * @throws {RequiredError}
      * @memberof ApplicationApiInterface
      */
-    indexRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaginationApplication>>;
+    indexRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaginationApplicationWithSecret>>;
 
     /**
      */
-    index(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaginationApplication>;
+    index(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaginationApplicationWithSecret>;
 
     /**
      * 
-     * @param {number} applicationId 
+     * @param {string} applicationId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ApplicationApiInterface
@@ -122,38 +122,38 @@ export interface ApplicationApiInterface {
 
     /**
      */
-    remove(applicationId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    remove(applicationId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
     /**
      * 
-     * @param {number} applicationId 
+     * @param {string} applicationId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ApplicationApiInterface
      */
-    showRaw(requestParameters: ShowRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Application>>;
+    showRaw(requestParameters: ShowRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ApplicationWithSecret>>;
 
     /**
      */
-    show(applicationId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Application>;
+    show(applicationId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ApplicationWithSecret>;
 
     /**
      * 
-     * @param {number} applicationId 
+     * @param {string} applicationId 
      * @param {UpdateApplicationRequest} updateApplicationRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ApplicationApiInterface
      */
-    updateRaw(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Application>>;
+    updateRaw(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ApplicationWithSecret>>;
 
     /**
      */
-    update(applicationId: number, updateApplicationRequest: UpdateApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Application>;
+    update(applicationId: string, updateApplicationRequest: UpdateApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ApplicationWithSecret>;
 
     /**
      * 
-     * @param {number} applicationId 
+     * @param {string} applicationId 
      * @param {UpdateApplicationConfigRequest} updateApplicationConfigRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -163,7 +163,7 @@ export interface ApplicationApiInterface {
 
     /**
      */
-    updateConfig(applicationId: number, updateApplicationConfigRequest: UpdateApplicationConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    updateConfig(applicationId: string, updateApplicationConfigRequest: UpdateApplicationConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
 
 }
 
@@ -203,14 +203,14 @@ export class ApplicationApi extends runtime.BaseAPI implements ApplicationApiInt
 
     /**
      */
-    async config(applicationId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ApplicationConfig>> {
+    async config(applicationId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<ApplicationConfig>> {
         const response = await this.configRaw({ applicationId: applicationId }, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Application>> {
+    async createRaw(requestParameters: CreateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ApplicationWithSecret>> {
         if (requestParameters.createApplicationRequest === null || requestParameters.createApplicationRequest === undefined) {
             throw new runtime.RequiredError('createApplicationRequest','Required parameter requestParameters.createApplicationRequest was null or undefined when calling create.');
         }
@@ -237,19 +237,19 @@ export class ApplicationApi extends runtime.BaseAPI implements ApplicationApiInt
             body: CreateApplicationRequestToJSON(requestParameters.createApplicationRequest),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ApplicationFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ApplicationWithSecretFromJSON(jsonValue));
     }
 
     /**
      */
-    async create(createApplicationRequest: CreateApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Application> {
+    async create(createApplicationRequest: CreateApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ApplicationWithSecret> {
         const response = await this.createRaw({ createApplicationRequest: createApplicationRequest }, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async indexRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaginationApplication>> {
+    async indexRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaginationApplicationWithSecret>> {
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
@@ -269,12 +269,12 @@ export class ApplicationApi extends runtime.BaseAPI implements ApplicationApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => PaginationApplicationFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => PaginationApplicationWithSecretFromJSON(jsonValue));
     }
 
     /**
      */
-    async index(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaginationApplication> {
+    async index(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaginationApplicationWithSecret> {
         const response = await this.indexRaw(initOverrides);
         return await response.value();
     }
@@ -310,13 +310,13 @@ export class ApplicationApi extends runtime.BaseAPI implements ApplicationApiInt
 
     /**
      */
-    async remove(applicationId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    async remove(applicationId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.removeRaw({ applicationId: applicationId }, initOverrides);
     }
 
     /**
      */
-    async showRaw(requestParameters: ShowRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Application>> {
+    async showRaw(requestParameters: ShowRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ApplicationWithSecret>> {
         if (requestParameters.applicationId === null || requestParameters.applicationId === undefined) {
             throw new runtime.RequiredError('applicationId','Required parameter requestParameters.applicationId was null or undefined when calling show.');
         }
@@ -340,19 +340,19 @@ export class ApplicationApi extends runtime.BaseAPI implements ApplicationApiInt
             query: queryParameters,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ApplicationFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ApplicationWithSecretFromJSON(jsonValue));
     }
 
     /**
      */
-    async show(applicationId: number, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Application> {
+    async show(applicationId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ApplicationWithSecret> {
         const response = await this.showRaw({ applicationId: applicationId }, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async updateRaw(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Application>> {
+    async updateRaw(requestParameters: UpdateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ApplicationWithSecret>> {
         if (requestParameters.applicationId === null || requestParameters.applicationId === undefined) {
             throw new runtime.RequiredError('applicationId','Required parameter requestParameters.applicationId was null or undefined when calling update.');
         }
@@ -383,12 +383,12 @@ export class ApplicationApi extends runtime.BaseAPI implements ApplicationApiInt
             body: UpdateApplicationRequestToJSON(requestParameters.updateApplicationRequest),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => ApplicationFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => ApplicationWithSecretFromJSON(jsonValue));
     }
 
     /**
      */
-    async update(applicationId: number, updateApplicationRequest: UpdateApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Application> {
+    async update(applicationId: string, updateApplicationRequest: UpdateApplicationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ApplicationWithSecret> {
         const response = await this.updateRaw({ applicationId: applicationId, updateApplicationRequest: updateApplicationRequest }, initOverrides);
         return await response.value();
     }
@@ -431,7 +431,7 @@ export class ApplicationApi extends runtime.BaseAPI implements ApplicationApiInt
 
     /**
      */
-    async updateConfig(applicationId: number, updateApplicationConfigRequest: UpdateApplicationConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
+    async updateConfig(applicationId: string, updateApplicationConfigRequest: UpdateApplicationConfigRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.updateConfigRaw({ applicationId: applicationId, updateApplicationConfigRequest: updateApplicationConfigRequest }, initOverrides);
     }
 

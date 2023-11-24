@@ -21,10 +21,10 @@ import { exists, mapValues } from '../runtime';
 export interface ResetPasswordRequest {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof ResetPasswordRequest
      */
-    application_id: number;
+    application_id: string;
     /**
      * 
      * @type {string}

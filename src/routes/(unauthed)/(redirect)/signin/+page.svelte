@@ -25,6 +25,7 @@
 </script>
 
 <script lang="ts">
+	import LL from '$lib/i18n/i18n-svelte';
 	import classNames from 'vest/classnames';
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
@@ -88,18 +89,18 @@
 </script>
 
 <svelte:head>
-	<title>Sign in</title>
+	<title>{$LL.sign_in()}</title>
 </svelte:head>
 
 <div class="flex flex-col flex-grow justify-end md:justify-start">
 	<div
 		class="flex flex-col flex-shrink md:w-72 w-full mx-auto my-10 bg-white dark:bg-gray-800 shadow p-4"
 	>
-		<h1 class="mb-1">Sign in</h1>
+		<h1 class="mb-1">{$LL.sign_in()}</h1>
 		{#if data.signUpMethods.enabled}
 			<p class="py-2">
-				<span>Not a member?</span>
-				<a href={`${base}/signup`} class="underline text-blue-500">Sign up</a>
+				<span>{$LL.not_a_member()}</span>
+				<a href={`${base}/signup`} class="underline text-blue-500">{$LL.sign_up()}</a>
 			</p>
 		{/if}
 		<form on:submit|preventDefault={onSubmit}>
@@ -109,7 +110,7 @@
 					type="text"
 					name="username"
 					autocomplete="username"
-					placeholder="Username/Email"
+					placeholder={$LL.username_placeholder()}
 					bind:value={username}
 					on:input={onChange}
 				/>
@@ -121,7 +122,7 @@
 					type="password"
 					name="password"
 					autocomplete="current-password"
-					placeholder="Password"
+					placeholder={$LL.password_placeholder()}
 					bind:value={password}
 					on:input={onChange}
 				/>
@@ -132,7 +133,7 @@
 					{#if loading}<div class="flex flex-row justify-center mr-2">
 							<div class="inline-block w-6 h-6"><Spinner /></div>
 						</div>{/if}
-					Sign in
+					{$LL.sign_in()}
 				</button>
 			</div>
 		</form>

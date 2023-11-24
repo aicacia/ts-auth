@@ -31,15 +31,15 @@
 	import InputResults from '$lib/components/InputResults.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import { applicationApi } from '$lib/openapi';
-	import type { Application } from '$lib/openapi/auth';
+	import type { ApplicationWithSecret } from '$lib/openapi/auth';
 	import { toURLSafe } from '$lib/util';
 	import { invalidate } from '$app/navigation';
 	import { base } from '$app/paths';
 
-	export let id: number | undefined = undefined;
+	export let id: string | undefined = undefined;
 	export let name: string = '';
 	export let uri: string = '';
-	export let onDone: (application: Application) => void;
+	export let onDone: (application: ApplicationWithSecret) => void;
 
 	const suite = createSuite();
 

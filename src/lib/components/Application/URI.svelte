@@ -29,7 +29,7 @@
 	import { applicationApi } from '$lib/openapi';
 	import Undo from 'lucide-svelte/dist/svelte/icons/undo-2.svelte';
 
-	export let id: number;
+	export let id: string;
 	export let uri: string = '';
 
 	let initialUri = uri;

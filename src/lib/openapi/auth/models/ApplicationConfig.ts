@@ -21,10 +21,10 @@ import { exists, mapValues } from '../runtime';
 export interface ApplicationConfig {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof ApplicationConfig
      */
-    application_id: number;
+    application_id: string;
     /**
      * 
      * @type {Date}

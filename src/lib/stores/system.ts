@@ -25,7 +25,7 @@ export function waitForSignUpMethods() {
 
 async function fetchSignUpMethods() {
 	try {
-		const signUpMethods = await authApi.signUpMethods(+PUBLIC_APPLICATION_ID);
+		const signUpMethods = await authApi.signUpMethods(PUBLIC_APPLICATION_ID);
 		signUpMethodsWritable.set(signUpMethods);
 		signUpMethodsLoaded = true;
 		emitter.emit('signUpMethods', signUpMethods);

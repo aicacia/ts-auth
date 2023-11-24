@@ -29,7 +29,7 @@ export function isSignedIn() {
 
 export async function signIn(usernameOrEmail: string, password: string) {
 	const token = await authApi.signInWithPassword({
-		application_id: 1,
+		application_id: PUBLIC_APPLICATION_ID,
 		username_or_email: usernameOrEmail,
 		password
 	});
@@ -43,7 +43,7 @@ export async function signUp(
 	email: string
 ) {
 	const token = await authApi.signUpWithPassword({
-		application_id: +PUBLIC_APPLICATION_ID,
+		application_id: PUBLIC_APPLICATION_ID,
 		username,
 		email,
 		password,
