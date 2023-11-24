@@ -1,74 +1,77 @@
-const n = /* @__PURE__ */ location.pathname.split("/").slice(0, -1).join("/"), u = [
-  n + "/internal/immutable/entry/app.1a8759b2.js",
-  n + "/internal/immutable/assets/0.23026998.css",
-  n + "/internal/immutable/nodes/0.09dd3d58.js",
-  n + "/internal/immutable/nodes/1.4b5188a9.js",
-  n + "/internal/immutable/nodes/10.8ff6c82e.js",
-  n + "/internal/immutable/nodes/11.9fe23331.js",
-  n + "/internal/immutable/nodes/2.86692bfb.js",
-  n + "/internal/immutable/nodes/3.1f752e2c.js",
-  n + "/internal/immutable/nodes/4.6352a351.js",
-  n + "/internal/immutable/nodes/5.cb531851.js",
-  n + "/internal/immutable/nodes/6.2be4c29d.js",
-  n + "/internal/immutable/nodes/7.96669372.js",
-  n + "/internal/immutable/nodes/8.0bf5a19c.js",
-  n + "/internal/immutable/nodes/9.5101ea47.js",
-  n + "/internal/immutable/chunks/ApplicationEditor.97d50e60.js",
-  n + "/internal/immutable/chunks/Dropdown.586d11c2.js",
-  n + "/internal/immutable/chunks/Icon.1c7886f7.js",
-  n + "/internal/immutable/chunks/Modal.b268260d.js",
-  n + "/internal/immutable/chunks/Spinner.d43ed761.js",
-  n + "/internal/immutable/chunks/clickoutside.1c3dfa27.js",
-  n + "/internal/immutable/chunks/control.f5b05b5f.js",
-  n + "/internal/immutable/chunks/each.a7fc62a0.js",
-  n + "/internal/immutable/chunks/errors.f448cefc.js",
-  n + "/internal/immutable/chunks/index.6dc2cd99.js",
-  n + "/internal/immutable/chunks/index.734baa98.js",
-  n + "/internal/immutable/chunks/index.d7eb2526.js",
-  n + "/internal/immutable/chunks/layout.b8530220.js",
-  n + "/internal/immutable/chunks/navigation.10b5eff6.js",
-  n + "/internal/immutable/chunks/notifications.e52be7c5.js",
-  n + "/internal/immutable/chunks/paths.841d00ad.js",
-  n + "/internal/immutable/chunks/pencil.4fdcd005.js",
-  n + "/internal/immutable/chunks/plus.906b1819.js",
-  n + "/internal/immutable/chunks/scheduler.0fc17c76.js",
-  n + "/internal/immutable/chunks/singletons.67ed1514.js",
-  n + "/internal/immutable/chunks/stores.d779b1c7.js",
-  n + "/internal/immutable/chunks/user.5c0b3fb6.js",
-  n + "/internal/immutable/entry/start.2181251c.js"
+const e = /* @__PURE__ */ location.pathname.split("/").slice(0, -1).join("/"), u = [
+  e + "/internal/immutable/entry/app.8635bbdd.js",
+  e + "/internal/immutable/assets/0.23026998.css",
+  e + "/internal/immutable/nodes/0.1be94ad8.js",
+  e + "/internal/immutable/nodes/1.81b6753b.js",
+  e + "/internal/immutable/nodes/10.783f954f.js",
+  e + "/internal/immutable/nodes/11.c61e2568.js",
+  e + "/internal/immutable/nodes/2.42456932.js",
+  e + "/internal/immutable/nodes/3.1b982277.js",
+  e + "/internal/immutable/nodes/4.03d9959e.js",
+  e + "/internal/immutable/nodes/5.f90a6d8d.js",
+  e + "/internal/immutable/nodes/6.3ef67914.js",
+  e + "/internal/immutable/nodes/7.ecd4df5e.js",
+  e + "/internal/immutable/nodes/8.8e671a92.js",
+  e + "/internal/immutable/nodes/9.5b792259.js",
+  e + "/internal/immutable/chunks/ApplicationEditor.57fa2171.js",
+  e + "/internal/immutable/chunks/Dropdown.b54f08a6.js",
+  e + "/internal/immutable/chunks/Icon.d3d17fc4.js",
+  e + "/internal/immutable/chunks/Modal.586f79b9.js",
+  e + "/internal/immutable/chunks/Spinner.02976e77.js",
+  e + "/internal/immutable/chunks/clickoutside.1c3dfa27.js",
+  e + "/internal/immutable/chunks/control.f5b05b5f.js",
+  e + "/internal/immutable/chunks/each.53f52777.js",
+  e + "/internal/immutable/chunks/errors.dfb17a50.js",
+  e + "/internal/immutable/chunks/i18n-svelte.a2172b89.js",
+  e + "/internal/immutable/chunks/index.2ae88f8a.js",
+  e + "/internal/immutable/chunks/index.d7eb2526.js",
+  e + "/internal/immutable/chunks/index.da9acd2d.js",
+  e + "/internal/immutable/chunks/layout.9c52c970.js",
+  e + "/internal/immutable/chunks/navigation.f5795296.js",
+  e + "/internal/immutable/chunks/notifications.8bbc2e1f.js",
+  e + "/internal/immutable/chunks/paths.10786b92.js",
+  e + "/internal/immutable/chunks/pencil.8f6aee61.js",
+  e + "/internal/immutable/chunks/plus.fcc1bfd4.js",
+  e + "/internal/immutable/chunks/preload-helper.a4192956.js",
+  e + "/internal/immutable/chunks/scheduler.281724f8.js",
+  e + "/internal/immutable/chunks/singletons.2a3723e9.js",
+  e + "/internal/immutable/chunks/stores.aea969df.js",
+  e + "/internal/immutable/chunks/user.9742e23d.js",
+  e + "/internal/immutable/entry/start.3bebb56e.js",
+  e + "/internal/immutable/chunks/index.804cfeab.js"
 ], r = [
-  n + "/favicon.png",
-  n + "/icon.png",
-  n + "/icon256x256.png",
-  n + "/manifest.json",
-  n + "/robots.txt"
-], o = "1700756908047", l = self, c = `cache-${o}`, m = [...u, ...r];
-l.addEventListener("install", (e) => {
-  async function a() {
+  e + "/favicon.png",
+  e + "/icon.png",
+  e + "/icon256x256.png",
+  e + "/manifest.json",
+  e + "/robots.txt"
+], b = "1700846612384", l = self, c = `cache-${b}`, m = [...u, ...r];
+l.addEventListener("install", (n) => {
+  async function t() {
     await (await caches.open(c)).addAll(m);
   }
-  e.waitUntil(a());
+  n.waitUntil(t());
 });
-l.addEventListener("activate", (e) => {
-  async function a() {
-    for (const t of await caches.keys())
-      t !== c && await caches.delete(t);
+l.addEventListener("activate", (n) => {
+  async function t() {
+    for (const a of await caches.keys())
+      a !== c && await caches.delete(a);
   }
-  e.waitUntil(a());
+  n.waitUntil(t());
 });
-l.addEventListener("fetch", (e) => {
-  if (e.request.method === "GET") {
-    async function a() {
-      const t = new URL(e.request.url), s = await caches.open(c);
-      if (m.includes(t.pathname))
-        return s.match(t.pathname);
+l.addEventListener("fetch", (n) => {
+  if (n.request.method === "GET") {
+    async function t() {
+      const a = new URL(n.request.url), s = await caches.open(c);
+      if (m.includes(a.pathname))
+        return s.match(a.pathname);
       try {
-        const i = await fetch(e.request);
-        return i.status === 200 && s.put(e.request, i.clone()), i;
+        const i = await fetch(n.request);
+        return i.status === 200 && s.put(n.request, i.clone()), i;
       } catch {
-        return s.match(e.request);
+        return s.match(n.request);
       }
     }
-    e.respondWith(a());
+    n.respondWith(t());
   }
 });
