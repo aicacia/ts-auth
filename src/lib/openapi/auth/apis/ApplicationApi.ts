@@ -52,6 +52,10 @@ export interface RemoveRequest {
     applicationId: string;
 }
 
+export interface ResetSecretRequest {
+    applicationId: string;
+}
+
 export interface ShowRequest {
     applicationId: string;
 }
@@ -123,6 +127,19 @@ export interface ApplicationApiInterface {
     /**
      */
     remove(applicationId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+
+    /**
+     * 
+     * @param {string} applicationId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ApplicationApiInterface
+     */
+    resetSecretRaw(requestParameters: ResetSecretRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ApplicationWithSecret>>;
+
+    /**
+     */
+    resetSecret(applicationId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ApplicationWithSecret>;
 
     /**
      * 
@@ -312,6 +329,42 @@ export class ApplicationApi extends runtime.BaseAPI implements ApplicationApiInt
      */
     async remove(applicationId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
         await this.removeRaw({ applicationId: applicationId }, initOverrides);
+    }
+
+    /**
+     */
+    async resetSecretRaw(requestParameters: ResetSecretRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<ApplicationWithSecret>> {
+        if (requestParameters.applicationId === null || requestParameters.applicationId === undefined) {
+            throw new runtime.RequiredError('applicationId','Required parameter requestParameters.applicationId was null or undefined when calling resetSecret.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("Authorization", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+        const response = await this.request({
+            path: `/applications/{application_id}/reset-secret`.replace(`{${"application_id"}}`, encodeURIComponent(String(requestParameters.applicationId))),
+            method: 'PATCH',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ApplicationWithSecretFromJSON(jsonValue));
+    }
+
+    /**
+     */
+    async resetSecret(applicationId: string, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<ApplicationWithSecret> {
+        const response = await this.resetSecretRaw({ applicationId: applicationId }, initOverrides);
+        return await response.value();
     }
 
     /**

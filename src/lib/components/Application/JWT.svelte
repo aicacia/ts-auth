@@ -116,7 +116,7 @@
 					class="flex flex-grow {cn('jwt')} pe-8"
 					type="text"
 					name="jwt"
-					placeholder="URL"
+					placeholder="JWT Secret"
 					bind:value={jwt}
 					on:input={onChange}
 				/>
@@ -126,7 +126,7 @@
 					class="flex flex-grow {cn('jwt')} pe-8"
 					type="password"
 					name="jwt"
-					placeholder="URL"
+					placeholder="JWT Secret"
 					bind:value={jwt}
 					on:input={onChange}
 				/>
@@ -144,7 +144,12 @@
 			</button>
 		</div>
 		<div class="flex flex-shrink">
-			<button type="submit" class="btn icon secondary" on:click|preventDefault={onGenerateNew}>
+			<button
+				type="submit"
+				class="btn icon secondary"
+				{disabled}
+				on:click|preventDefault={onGenerateNew}
+			>
 				<RotateCCW />
 			</button>
 			<button type="submit" class="btn primary" {disabled}>
