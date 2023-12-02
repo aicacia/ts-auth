@@ -35,8 +35,15 @@
 	import { debounce } from '@aicacia/debounce';
 	import InputResults from '$lib/components/InputResults.svelte';
 	import type { PageData } from './$types';
+	import { page } from '$app/stores';
+	import { getOAuth2Application, isOAuth2Authorize } from '$lib/stores/oauth2';
 
 	export let data: PageData;
+
+	$: code = $page.url.searchParams.get('code');
+	$: if (code) {
+		getOAuth2Application(code);
+	}
 
 	const suite = createSuite();
 
@@ -78,7 +85,11 @@
 			validateAll();
 			if (result.isValid()) {
 				await signIn(username, password);
-				await goto(`${base}/`);
+				if (isOAuth2Authorize()) {
+					await goto(`${base}/oauth2/authorize`);
+				} else {
+					await goto(`${base}/`);
+				}
 			}
 		} catch (error) {
 			await handleError(error);

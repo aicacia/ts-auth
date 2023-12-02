@@ -48,6 +48,11 @@ export interface CreateRequest {
     createApplicationRequest: CreateApplicationRequest;
 }
 
+export interface IndexRequest {
+    page?: number | null;
+    pageSize?: number | null;
+}
+
 export interface RemoveRequest {
     applicationId: string;
 }
@@ -105,15 +110,17 @@ export interface ApplicationApiInterface {
 
     /**
      * 
+     * @param {number} [page] 
+     * @param {number} [pageSize] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ApplicationApiInterface
      */
-    indexRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaginationApplicationWithSecret>>;
+    indexRaw(requestParameters: IndexRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaginationApplicationWithSecret>>;
 
     /**
      */
-    index(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaginationApplicationWithSecret>;
+    index(page?: number | null, pageSize?: number | null, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaginationApplicationWithSecret>;
 
     /**
      * 
@@ -266,8 +273,16 @@ export class ApplicationApi extends runtime.BaseAPI implements ApplicationApiInt
 
     /**
      */
-    async indexRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaginationApplicationWithSecret>> {
+    async indexRaw(requestParameters: IndexRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<PaginationApplicationWithSecret>> {
         const queryParameters: any = {};
+
+        if (requestParameters.page !== undefined) {
+            queryParameters['page'] = requestParameters.page;
+        }
+
+        if (requestParameters.pageSize !== undefined) {
+            queryParameters['page_size'] = requestParameters.pageSize;
+        }
 
         const headerParameters: runtime.HTTPHeaders = {};
 
@@ -291,8 +306,8 @@ export class ApplicationApi extends runtime.BaseAPI implements ApplicationApiInt
 
     /**
      */
-    async index(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaginationApplicationWithSecret> {
-        const response = await this.indexRaw(initOverrides);
+    async index(page?: number | null, pageSize?: number | null, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<PaginationApplicationWithSecret> {
+        const response = await this.indexRaw({ page: page, pageSize: pageSize }, initOverrides);
         return await response.value();
     }
 

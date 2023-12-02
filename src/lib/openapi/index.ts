@@ -4,7 +4,8 @@ import {
 	UserApi,
 	UtilApi,
 	type ConfigurationParameters,
-	ApplicationApi
+	ApplicationApi,
+	Oauth2Api
 } from './auth';
 import { PUBLIC_AUTH_API_URL } from '$env/static/public';
 
@@ -27,6 +28,7 @@ export const utilApi = new UtilApi(authConfiguration);
 export const authApi = new AuthApi(authConfiguration);
 export const userApi = new UserApi(authConfiguration);
 export const applicationApi = new ApplicationApi(authConfiguration);
+export const oauth2Api = new Oauth2Api(authConfiguration);
 
 export function setAccessToken(accessToken?: string) {
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment

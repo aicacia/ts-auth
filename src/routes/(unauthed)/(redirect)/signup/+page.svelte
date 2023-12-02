@@ -44,6 +44,7 @@
 	import { handleError } from '$lib/errors';
 	import { debounce } from '@aicacia/debounce';
 	import InputResults from '$lib/components/InputResults.svelte';
+	import { isOAuth2Authorize } from '$lib/stores/oauth2';
 
 	const suite = createSuite();
 
@@ -90,7 +91,11 @@
 			validateAll();
 			if (result.isValid()) {
 				await signUp(username, password, passwordConfirmation, email);
-				await goto(`${base}/`);
+				if (isOAuth2Authorize()) {
+					await goto(`${base}/oauth2/authorize`);
+				} else {
+					await goto(`${base}/`);
+				}
 			}
 		} catch (error) {
 			await handleError(error);

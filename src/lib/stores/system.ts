@@ -1,4 +1,4 @@
-import { browser } from '$app/environment';
+import { browser, building } from '$app/environment';
 import { PUBLIC_APPLICATION_ID } from '$env/static/public';
 import { handleError } from '$lib/errors';
 import { authApi } from '$lib/openapi';
@@ -16,7 +16,7 @@ let signUpMethodsLoaded = false;
 export const signUpMethods = derived(signUpMethodsWritable, (state) => state);
 
 export function waitForSignUpMethods() {
-	if (signUpMethodsLoaded) {
+	if (building || signUpMethodsLoaded) {
 		return Promise.resolve(get(signUpMethods));
 	} else {
 		return new Promise<SignUpMethods>((resolve) => emitter.once('signUpMethods', resolve));
