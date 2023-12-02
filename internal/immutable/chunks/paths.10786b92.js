@@ -1,1 +1,0 @@
-var s,t;const o=(t=(s=globalThis.__sveltekit_qjcpo3)==null?void 0:s.base)!=null?t:"/ts-auth";var a,e;const l=(e=(a=globalThis.__sveltekit_qjcpo3)==null?void 0:a.assets)!=null?e:o;export{l as a,o as b};
