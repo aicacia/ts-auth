@@ -1,0 +1,1 @@
+import{o as i}from"./index.meplm-_N.js";import{l as n}from"./localstorageWritable._JYoYNm1.js";import{d as p}from"./index.ltnQeb78.js";import{g as r}from"./utils.C9MzFJhm.js";const o=n("oauth2-application",null),s=p(o,t=>t);function A(){return!!r(s)}async function h(t){const a=await i.application(t);o.set(a)}function m(){o.set(null)}export{h as g,A as i,s as o,m as r};
