@@ -8,10 +8,10 @@ export const load: PageLoad = async (event) => {
 
 	if (!signUpMethods.enabled) {
 		createNotification('Sign up is not enabled');
-		throw redirect(302, `${base}/signin`);
+		redirect(302, `${base}/signin`);
+	} else {
+		return {
+			signUpMethods
+		};
 	}
-
-	return {
-		signUpMethods
-	};
 };

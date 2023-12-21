@@ -3,16 +3,17 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
-	import { page } from '$app/stores';
 	import {
 		oauth2Application,
 		getOAuth2Application,
 		resetOAuth2Application
 	} from '$lib/stores/oauth2';
+	import type { PageData } from './$types';
 
-	$: code = $page.url.searchParams.get('code');
-	$: if (code) {
-		getOAuth2Application(code);
+	export let data: PageData;
+
+	$: if (data.code) {
+		getOAuth2Application(data.code);
 	}
 
 	$: application = $oauth2Application?.application;

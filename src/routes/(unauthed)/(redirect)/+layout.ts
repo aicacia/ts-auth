@@ -8,10 +8,10 @@ export const load: LayoutLoad = async () => {
 	const signUpMethods = await waitForSignUpMethods();
 
 	if (isSignedIn()) {
-		throw redirect(302, `${base}/`);
+		redirect(302, `${base}/`);
+	} else {
+		return {
+			signUpMethods
+		};
 	}
-
-	return {
-		signUpMethods
-	};
 };

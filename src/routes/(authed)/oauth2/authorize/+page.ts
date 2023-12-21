@@ -1,12 +1,11 @@
+import { getCurrentUser } from '$lib/stores/user';
 import type { PageLoad } from './$types';
 
 export const prerender = false;
 
 export const load: PageLoad = async (event) => {
-	const { signUpMethods } = await event.parent();
+	await getCurrentUser();
 	const code = event.url.searchParams.get('code');
-	return {
-		signUpMethods,
-		code
-	};
+
+	return { code };
 };

@@ -88,15 +88,18 @@
 <form class="flex flex-col flex-grow" on:submit|preventDefault={onSubmit}>
 	<label for="uri">URI</label>
 	<div class="flex flex-row">
-		<div class="flex flex-shrink">
-			<button
-				type="submit"
-				class="btn icon secondary flex flex-shrink"
-				on:click|preventDefault={onReset}
-			>
-				<Undo />
-			</button>
-		</div>
+		{#if uri !== initialUri}
+			<div class="flex flex-shrink">
+				<button
+					type="submit"
+					title="Undo"
+					class="btn icon secondary flex flex-shrink"
+					on:click|preventDefault={onReset}
+				>
+					<Undo />
+				</button>
+			</div>
+		{/if}
 		<div class="flex flex-grow relative">
 			<input
 				id="uri"

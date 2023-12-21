@@ -6,7 +6,7 @@ import { locale } from '$lib/stores/locale';
 import { detectLocale } from '$lib/i18n/i18n-util';
 
 export const prerender = true;
-export const ssr = false;
+export const ssr = true;
 
 export const load: LayoutLoad = async (_event) => {
 	const currentLocale = detectLocale(() => [get(locale)]);

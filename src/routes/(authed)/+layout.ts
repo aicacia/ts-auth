@@ -11,6 +11,6 @@ export const load: LayoutLoad = async () => {
 			user: currentUser
 		};
 	} else {
-		throw redirect(302, `${base}/signin`);
+		redirect(302, `${base}/signin`);
 	}
 };

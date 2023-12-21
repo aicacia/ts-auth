@@ -86,7 +86,7 @@
 			</button>
 		</div>
 		<div class="flex flex-shrink">
-			<button class="btn icon secondary" on:click={onResetOpen}>
+			<button class="btn icon secondary" title="Reset" on:click={onResetOpen}>
 				<RotateCCW />
 			</button>
 		</div>

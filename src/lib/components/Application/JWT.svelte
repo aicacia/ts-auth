@@ -38,7 +38,7 @@
 	export let id: string;
 	export let jwt: string = '';
 
-	let initialUri = jwt;
+	let initialJwt = jwt;
 	const suite = createSuite();
 
 	let show = false;
@@ -74,7 +74,7 @@
 	}
 
 	function onReset() {
-		jwt = initialUri;
+		jwt = initialJwt;
 		suite.reset();
 	}
 
@@ -89,7 +89,7 @@
 			validateAll();
 			if (result.isValid()) {
 				await applicationApi.updateConfig(id, { key: 'jwt.secret', value: jwt });
-				initialUri = jwt;
+				initialJwt = jwt;
 				suite.reset();
 				createNotification('invalidated_jwt', 'info');
 			}
@@ -104,11 +104,18 @@
 <form class="flex flex-col flex-grow" on:submit|preventDefault={onSubmit}>
 	<label for="application-jwt">JWT Secret</label>
 	<div class="flex flex-row">
-		<div class="flex flex-shrink">
-			<button type="submit" class="btn icon secondary" on:click|preventDefault={onReset}>
-				<Undo />
-			</button>
-		</div>
+		{#if jwt !== initialJwt}
+			<div class="flex flex-shrink">
+				<button
+					type="submit"
+					class="btn icon secondary"
+					title="Undo"
+					on:click|preventDefault={onReset}
+				>
+					<Undo />
+				</button>
+			</div>
+		{/if}
 		<div class="flex flex-grow relative">
 			{#if show}
 				<input
