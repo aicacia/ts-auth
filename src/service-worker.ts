@@ -31,7 +31,7 @@ worker.addEventListener('activate', (event) => {
 
 worker.addEventListener('fetch', (event) => {
 	if (event.request.method === 'GET') {
-		async function respond() {
+		const response = (async () => {
 			const url = new URL(event.request.url);
 			const cache = await caches.open(CACHE);
 
@@ -42,7 +42,7 @@ worker.addEventListener('fetch', (event) => {
 			try {
 				const response = await fetch(event.request);
 
-				if (response.status === 200) {
+				if (response.status === 200 && !event.request.url.startsWith('chrome-extension://')) {
 					cache.put(event.request, response.clone());
 				}
 
@@ -50,8 +50,8 @@ worker.addEventListener('fetch', (event) => {
 			} catch {
 				return cache.match(event.request);
 			}
-		}
+		})();
 
-		event.respondWith(respond() as Promise<Response>);
+		event.respondWith(response as Promise<Response>);
 	}
 });

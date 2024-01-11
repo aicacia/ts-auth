@@ -2,28 +2,20 @@
 
 <script lang="ts">
 	import Popup from './Popup.svelte';
-	import { clickoutside } from '@svelte-put/clickoutside';
 
+	export let name = '';
 	export let open = false;
 
-	function toggle() {
+	function toggle(e: Event) {
+		e.stopPropagation();
 		open = !open;
-	}
-
-	function onClickOutside() {
-		open = false;
 	}
 
 	let anchor: HTMLDivElement;
 </script>
 
-<div
-	class="flex flex-col static"
-	bind:this={anchor}
-	use:clickoutside={{ event: 'mousedown' }}
-	on:clickoutside={onClickOutside}
->
-	<button type="button" class="flex flex-shrink btn icon primary" on:click={toggle}>
+<div class="flex flex-col static" bind:this={anchor}>
+	<button type="button" aria-label={name} class="flex-grow btn icon primary" on:click={toggle}>
 		<slot name="button" />
 	</button>
 	<Popup {anchor} {open}>

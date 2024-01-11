@@ -7,7 +7,7 @@ node_modules
 /functions
 /package
 build.pem
-.env
+.env*
 !.env.example
 /values.yaml
 

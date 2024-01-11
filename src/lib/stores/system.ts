@@ -34,6 +34,4 @@ async function fetchSignUpMethods() {
 	}
 }
 
-if (browser) {
-	fetchSignUpMethods();
-}
+fetchSignUpMethods();
