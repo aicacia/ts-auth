@@ -29,7 +29,7 @@
 	import { applicationApi } from '$lib/openapi';
 	import Undo from 'lucide-svelte/dist/svelte/icons/undo-2.svelte';
 
-	export let id: string;
+	export let id: number;
 	export let uri: string = '';
 
 	let initialUri = uri;
@@ -111,7 +111,10 @@
 				on:input={onChange}
 			/>
 		</div>
-		<div class="flex flex-shrink">
+	</div>
+	<InputResults name="uri" {result} />
+	{#if initialUri !== uri}
+		<div class="flex flex-row justify-end mt-2">
 			<button type="submit" class="btn primary flex flex-shrink" {disabled}>
 				{#if loading}<div class="flex flex-row justify-center mr-2">
 						<div class="inline-block w-6 h-6"><Spinner /></div>
@@ -119,6 +122,5 @@
 				Update
 			</button>
 		</div>
-	</div>
-	<InputResults name="uri" {result} />
+	{/if}
 </form>

@@ -7,7 +7,7 @@
 	import Modal from '../Modal.svelte';
 	import DeleteApplicationForm from './DeleteApplicationForm.svelte';
 
-	export let id: string;
+	export let id: number;
 	export let originalUri: string;
 
 	let open = false;

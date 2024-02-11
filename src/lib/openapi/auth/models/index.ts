@@ -11,7 +11,7 @@ export * from './Email';
 export * from './Health';
 export * from './Message';
 export * from './OAuth2Application';
-export * from './PaginationApplicationWithSecret';
+export * from './PaginationApplication';
 export * from './PaginationUser';
 export * from './RequestResetPasswordRequest';
 export * from './ResetPasswordRequest';

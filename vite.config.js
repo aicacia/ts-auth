@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 import { defineConfig, loadEnv } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { networkInterfaces } from 'node:os';
-
-const packageJSON = require('./package.json');
+import { readFileSync } from 'node:fs';
 
 // https://vitejs.dev/config/
 export default defineConfig(async ({ mode }) => {
@@ -10,19 +11,23 @@ export default defineConfig(async ({ mode }) => {
 
 	process.env = { ...process.env, ...loadEnv(mode, process.cwd(), '') };
 
+	const packageJSON = JSON.parse(readFileSync(`${__dirname}/package.json`).toString('utf8'));
+
 	const host = await getInternalIpV4();
 
 	const define = {
 		__VERSION__: JSON.stringify(packageJSON.version)
 	};
 	if (!isProd) {
+		// @ts-ignore
 		const url = new URL(process.env.PUBLIC_AUTH_API_URL);
 		url.host = host;
 		let urlString = url.toString();
 		if (urlString.endsWith('/')) {
 			urlString = urlString.slice(0, -1);
 		}
-		define.__DEV_AUTH_API_URL__ = JSON.stringify(urlString);
+		// @ts-ignore
+		define.__DEV_TIDY_VANITY_API_URL__ = JSON.stringify(urlString);
 	}
 
 	/** @type {import('vite').UserConfig} */
@@ -36,15 +41,12 @@ export default defineConfig(async ({ mode }) => {
 				protocol: 'ws',
 				host,
 				port: 5183
+			},
+			watch: {
+				ignored: ['**/src-tauri/**']
 			}
 		},
 		plugins: [sveltekit()],
-		envPrefix: ['VITE_', 'TAURI_'],
-		build: {
-			target: process.env.TAURI_PLATFORM == 'windows' ? 'chrome105' : 'safari13',
-			minify: !process.env.TAURI_DEBUG ? 'esbuild' : false,
-			sourcemap: !!process.env.TAURI_DEBUG
-		},
 		define
 	};
 
@@ -53,11 +55,13 @@ export default defineConfig(async ({ mode }) => {
 
 function getInternalIpV4() {
 	const nets = networkInterfaces();
-	for (const name of Object.keys(nets)) {
-		for (const net of nets[name]) {
-			const familyV4Value = typeof net.family === 'string' ? 'IPv4' : 4;
-			if (net.family === familyV4Value && !net.internal) {
-				return net.address;
+	for (const networks of Object.values(nets)) {
+		if (networks) {
+			for (const net of networks) {
+				const familyV4Value = typeof net.family === 'string' ? 'IPv4' : 4;
+				if (net.family === familyV4Value && !net.internal) {
+					return net.address;
+				}
 			}
 		}
 	}

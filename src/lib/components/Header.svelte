@@ -26,7 +26,7 @@
 
 <div class="flex flex-row flex-shrink justify-between bg-white dark:bg-gray-800 shadow z-20">
 	<div class="flex flex-row flex-shrink ms-2">
-		<a class="btn text-lg" href={`${base}/applications`}>Auth</a>
+		<a class="btn text-lg" href={`${base}/`}>Auth</a>
 	</div>
 	<div class="flex flex-row flex-shrink me-2">
 		<div class="flex flex-col justify-center content-center">

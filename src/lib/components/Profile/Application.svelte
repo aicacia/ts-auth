@@ -17,7 +17,7 @@
 <div class="flex flex-row flex-grow items-center justify-between">
 	<div class="flex flex-grow">
 		<div class="relative">
-			<h5>{application.name}</h5>
+			<h5>{application.description}</h5>
 		</div>
 	</div>
 	<div class="flex flex-shrink">

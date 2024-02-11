@@ -24,11 +24,11 @@
 	let filtered = new Set<number>();
 	$: filtered = $search.length
 		? applications.reduce((acc, a) => {
-				if (!fuzzyEquals($search, a.name)) {
+				if (!fuzzyEquals($search, a.description)) {
 					acc.add(a.id);
 				}
 				return acc;
-		  }, new Set<number>())
+			}, new Set<number>())
 		: new Set<number>();
 
 	let addOpen = false;
@@ -69,7 +69,7 @@
 					{@const hidden = filtered.has(application.id)}
 					<tr class="group" class:border-b={index < applications.length - 1} class:hidden>
 						<td>{application.id}</td>
-						<td>{application.name}</td>
+						<td>{application.description}</td>
 						<td>{application.uri}</td>
 						<td>{application.created_at.toLocaleString()}</td>
 						<td>{application.updated_at.toLocaleString()}</td>

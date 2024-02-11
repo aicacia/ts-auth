@@ -1,7 +1,7 @@
 <svelte:options immutable />
 
 <script lang="ts">
-	import { portal } from 'svelte-portal/src/Portal.svelte';
+	import { portal } from 'svelte-portal';
 	import X from 'lucide-svelte/dist/svelte/icons/x.svelte';
 	import { createInsecureID } from '$lib/util';
 	import { clickoutside } from '@svelte-put/clickoutside';

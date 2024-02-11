@@ -34,8 +34,9 @@
 	import { fromUint8Array } from 'js-base64';
 	import { fillBytes } from '@aicacia/rand';
 	import { createNotification } from '$lib/stores/notifications';
+	import Modal from '../Modal.svelte';
 
-	export let id: string;
+	export let id: number;
 	export let jwt: string = '';
 
 	let initialJwt = jwt;
@@ -73,6 +74,14 @@
 		validate();
 	}
 
+	let updateOpen = false;
+	function onUpdateOpen() {
+		updateOpen = true;
+	}
+	function onUpdateCancel() {
+		updateOpen = false;
+	}
+
 	function onReset() {
 		jwt = initialJwt;
 		suite.reset();
@@ -92,6 +101,7 @@
 				initialJwt = jwt;
 				suite.reset();
 				createNotification('invalidated_jwt', 'info');
+				onUpdateCancel();
 			}
 		} catch (error) {
 			await handleError(error);
@@ -101,7 +111,7 @@
 	}
 </script>
 
-<form class="flex flex-col flex-grow" on:submit|preventDefault={onSubmit}>
+<form class="flex flex-col flex-grow" on:submit|preventDefault={onUpdateOpen}>
 	<label for="application-jwt">JWT Secret</label>
 	<div class="flex flex-row">
 		{#if jwt !== initialJwt}
@@ -159,6 +169,11 @@
 			>
 				<RotateCCW />
 			</button>
+		</div>
+	</div>
+	<InputResults name="jwt" {result} />
+	{#if jwt !== initialJwt}
+		<div class="flex flex-row justify-end mt-2">
 			<button type="submit" class="btn primary" {disabled}>
 				{#if loading}<div class="flex flex-row justify-center mr-2">
 						<div class="inline-block w-6 h-6"><Spinner /></div>
@@ -166,6 +181,14 @@
 				Update
 			</button>
 		</div>
-	</div>
-	<InputResults name="jwt" {result} />
+	{/if}
 </form>
+
+<Modal bind:open={updateOpen}>
+	<h4 slot="title">Update Application JWT?</h4>
+	<p>Update Application JWT? this will invalidate anything using the old JWT secret.</p>
+	<div class="flex flex-row justify-end">
+		<button class="btn secondary" {disabled} on:click={onUpdateCancel}>Cancel</button>
+		<button class="btn danger" {disabled} on:click={onSubmit}>Reset</button>
+	</div>
+</Modal>

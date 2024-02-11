@@ -30,12 +30,12 @@ export const userApi = new UserApi(authConfiguration);
 export const applicationApi = new ApplicationApi(authConfiguration);
 export const oauth2Api = new Oauth2Api(authConfiguration);
 
-export function setAccessToken(accessToken?: string) {
+export function setAuthToken(authToken?: string) {
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
-	authConfiguration.configuration.accessToken = accessToken;
+	authConfiguration.configuration.accessToken = authToken;
 }
-export function getAccessToken() {
+export function getAuthToken() {
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
 	return authConfiguration.configuration?.accessToken as string | undefined;

@@ -1,7 +1,7 @@
 import { derived, get } from 'svelte/store';
 import { localstorageWritable } from 'svelte-localstorage-writable';
 import { isOnline } from './online';
-import { authApi, authConfiguration, getAccessToken, setAccessToken, userApi } from '$lib/openapi';
+import { authApi, authConfiguration, getAuthToken, setAuthToken, userApi } from '$lib/openapi';
 import type { User } from '$lib/openapi/auth';
 import EventEmitter from 'eventemitter3';
 import { goto } from '$app/navigation';
@@ -10,26 +10,33 @@ import { PUBLIC_APPLICATION_ID } from '$env/static/public';
 
 const tokenWritable = localstorageWritable<string | null>('token', null);
 const userWritable = localstorageWritable<User | null>('user', null);
+
 export const user = derived(userWritable, (user) => user);
 export const signedIn = derived(userWritable, (user) => !!user);
 export const admin = derived(userWritable, (user) => user?.permissions.includes('admin') === true);
 
-const emitter = new EventEmitter<{ user: User }>();
+export const userEmitter = new EventEmitter<{ user(user: User): void; signOut(): void }>();
+
 export function waitForUser() {
-	if (getAccessToken()) {
-		return Promise.resolve(get(userWritable));
+	const user = get(userWritable);
+	if (getAuthToken() && user) {
+		return Promise.resolve(user);
 	} else {
-		return new Promise<User>((resolve) => emitter.once('user', resolve));
+		return new Promise<User>((resolve) => userEmitter.once('user', resolve));
 	}
 }
 
 export function isSignedIn() {
-	return !!get(user) && !!get(tokenWritable);
+	return get(signedIn);
+}
+
+export function getUser() {
+	return get(user);
 }
 
 export async function signIn(usernameOrEmail: string, password: string) {
 	const token = await authApi.signInWithPassword({
-		application_id: PUBLIC_APPLICATION_ID,
+		application_id: parseInt(PUBLIC_APPLICATION_ID),
 		username_or_email: usernameOrEmail,
 		password
 	});
@@ -43,7 +50,7 @@ export async function signUp(
 	email: string
 ) {
 	const token = await authApi.signUpWithPassword({
-		application_id: PUBLIC_APPLICATION_ID,
+		application_id: parseInt(PUBLIC_APPLICATION_ID),
 		username,
 		email,
 		password,
@@ -53,18 +60,19 @@ export async function signUp(
 }
 
 async function signInWithToken(token: string) {
-	setAccessToken(token);
+	setAuthToken(token);
 	const user = await userApi.current();
 	userWritable.set(user);
 	tokenWritable.set(token);
-	emitter.emit('user', user);
+	userEmitter.emit('user', user);
 	return user;
 }
 
 export function signOut() {
 	userWritable.set(null);
 	tokenWritable.set(null);
-	setAccessToken(undefined);
+	setAuthToken(undefined);
+	userEmitter.emit('signOut');
 }
 
 export async function changeUsername(username: string) {
@@ -145,32 +153,35 @@ export async function getCurrentUser() {
 			if (isOnline()) {
 				const token = get(tokenWritable);
 				if (token) {
-					setAccessToken(token);
+					setAuthToken(token);
 					user = await userApi.current();
 					userWritable.set(user);
-					emitter.emit('user', user);
+					userEmitter.emit('user', user);
 				} else {
 					signOut();
 					user = null;
 				}
 			} else if (user) {
-				emitter.emit('user', user);
+				userEmitter.emit('user', user);
 			}
 			initialCall = false;
 		}
 		return user;
-	} catch (e) {
-		console.error(e);
+	} catch (error) {
+		console.error(error);
 		signOut();
 		return null;
 	}
 }
-
 authConfiguration.middleware?.push({
 	async post(context) {
-		if (context.response.status === 401) {
-			signOut();
-			await goto(`${base}/signin`);
+		switch (context.response.status) {
+			case 401:
+				signOut();
+				await goto(`${base}/signin`);
+				break;
+			case 503:
+				await goto(`${base}/maintenance`);
 		}
 	}
 });

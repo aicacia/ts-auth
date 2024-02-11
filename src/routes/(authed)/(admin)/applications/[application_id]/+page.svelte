@@ -13,7 +13,7 @@
 </script>
 
 <svelte:head>
-	<title>{application.name}</title>
+	<title>{application.description}</title>
 </svelte:head>
 
 <div class="flex flex-col justify-end md:justify-start px-4">
@@ -24,7 +24,7 @@
 			<a class="btn icon primary me-2" href={`${base}/applications`}>
 				<ArrowLeft />
 			</a>
-			<h4>{application.name}</h4>
+			<h4>{application.description}</h4>
 		</div>
 	</div>
 </div>

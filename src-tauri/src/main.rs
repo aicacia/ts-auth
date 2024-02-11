@@ -3,5 +3,5 @@
 
 fn main() {
   #[cfg(desktop)]
-  auth::run();
+  auth_ui::run();
 }

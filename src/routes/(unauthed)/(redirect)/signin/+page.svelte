@@ -36,6 +36,7 @@
 	import InputResults from '$lib/components/InputResults.svelte';
 	import type { PageData } from './$types';
 	import { getOAuth2Application, isOAuth2Authorize } from '$lib/stores/oauth2';
+	import { createNotification } from '$lib/stores/notifications';
 
 	export let data: PageData;
 

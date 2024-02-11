@@ -4,7 +4,7 @@
 	import { create, test, enforce, only } from 'vest';
 
 	type ApplicationForm = {
-		name: string;
+		description: string;
 		uri: string;
 	};
 
@@ -15,8 +15,8 @@
 			}
 			only(fields);
 
-			test('name', 'required', () => {
-				enforce(data.name).isNotBlank();
+			test('description', 'required', () => {
+				enforce(data.description).isNotBlank();
 			});
 			test('uri', 'required', () => {
 				enforce(data.uri).isNotBlank();
@@ -31,17 +31,19 @@
 	import InputResults from '$lib/components/InputResults.svelte';
 	import Spinner from '$lib/components/Spinner.svelte';
 	import { applicationApi } from '$lib/openapi';
-	import type { ApplicationWithSecret } from '$lib/openapi/auth';
+	import type { Application } from '$lib/openapi/auth';
 	import { toURLSafe } from '$lib/util';
 	import { invalidate } from '$app/navigation';
 	import { base } from '$app/paths';
 
-	export let id: string | undefined = undefined;
-	export let name: string = '';
+	export let id: number | undefined = undefined;
+	export let description: string = '';
 	export let uri: string = '';
-	export let onDone: (application: ApplicationWithSecret) => void;
+	export let onDone: (application: Application) => void;
 
 	const suite = createSuite();
+	let initalDescription = description;
+	let initalURI = uri;
 
 	let result = suite.get();
 	$: disabled = loading;
@@ -55,13 +57,13 @@
 
 	const fields = new Set<string>();
 	const validate = debounce(() => {
-		suite({ name, uri }, Array.from(fields)).done((r) => {
+		suite({ description, uri }, Array.from(fields)).done((r) => {
 			result = r;
 		});
 		fields.clear();
 	}, 300);
 	function validateAll() {
-		fields.add('name');
+		fields.add('description');
 		fields.add('uri');
 		validate();
 		validate.flush();
@@ -71,7 +73,7 @@
 		validate();
 	}
 	function onNameChange(e: Event & { currentTarget: HTMLInputElement | HTMLSelectElement }) {
-		uri = toURLSafe(name);
+		uri = toURLSafe(description);
 		onChange(e);
 	}
 	function onURIChange(e: Event & { currentTarget: HTMLInputElement | HTMLSelectElement }) {
@@ -87,11 +89,13 @@
 			if (result.isValid()) {
 				const application =
 					id == null
-						? await applicationApi.create({ name, uri })
-						: await applicationApi.update(id, { name, uri });
+						? await applicationApi.create({ description, uri })
+						: await applicationApi.update(id, { description, uri });
 				if (id == null) {
 					await invalidate(`${base}/applications`);
 				}
+				initalDescription = application.description;
+				initalURI = application.uri;
 				onDone(application);
 				suite.reset();
 			}
@@ -105,17 +109,17 @@
 
 <form class="flex flex-col flex-grow" on:submit|preventDefault={onSubmit}>
 	<div class="mb-2">
-		<label for="application-name">Name</label>
+		<label for="application-description">Description</label>
 		<input
-			id="application-name"
-			class="w-full {cn('name')}"
+			id="application-description"
+			class="w-full {cn('description')}"
 			type="text"
-			name="name"
-			placeholder="Name"
-			bind:value={name}
+			name="description"
+			placeholder="Description"
+			bind:value={description}
 			on:input={onNameChange}
 		/>
-		<InputResults name="name" {result} />
+		<InputResults name="description" {result} />
 	</div>
 	<div class="mb-2">
 		<label for="application-uri">URL Safe Short Name</label>
@@ -130,12 +134,14 @@
 		/>
 		<InputResults name="uri" {result} />
 	</div>
-	<div class="flex flex-row justify-end">
-		<button type="submit" class="btn primary flex flex-shrink" {disabled}>
-			{#if loading}<div class="flex flex-row justify-center mr-2">
-					<div class="inline-block w-6 h-6"><Spinner /></div>
-				</div>{/if}
-			{#if id == null}Create{:else}Update{/if}
-		</button>
-	</div>
+	{#if initalDescription !== description || initalURI !== uri}
+		<div class="flex flex-row justify-end">
+			<button type="submit" class="btn primary flex flex-shrink" {disabled}>
+				{#if loading}<div class="flex flex-row justify-center mr-2">
+						<div class="inline-block w-6 h-6"><Spinner /></div>
+					</div>{/if}
+				{#if id == null}Create{:else}Update{/if}
+			</button>
+		</div>
+	{/if}
 </form>
