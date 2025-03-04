@@ -1,33 +1,8 @@
 <script lang="ts" module>
-	import { create, test, enforce, only } from 'vest';
-
 	export interface NewTenantProps {
 		applicationId: number;
 		onCreate(tenant: Tenant): void;
 	}
-
-	type NewTenantForm = {
-		algorithm: Algorithm;
-		audience: string;
-		clientId: string;
-		expiresInSeconds: number;
-		issuer: string;
-		privateKey: string;
-		publicKey: string;
-		refreshExpiresInSeconds: number;
-	};
-
-	const createSuite = () =>
-		create((data: Partial<NewTenantForm> = {}, fields: string[]) => {
-			if (!fields.length) {
-				return;
-			}
-			only(fields);
-
-			test('issuer', m.errors_message_required(), () => {
-				enforce(data.issuer).isNotBlank();
-			});
-		});
 </script>
 
 <script lang="ts">

@@ -18,3 +18,10 @@ export function getOrigin() {
 	}
 	return env.PUBLIC_AUTH_URL;
 }
+
+export async function copyToClipboard(value: string) {
+	if (!navigator.clipboard) {
+		throw new Error("Browser don't have support for native clipboard.");
+	}
+	await navigator.clipboard.writeText(value);
+};
