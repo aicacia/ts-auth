@@ -1,0 +1,1 @@
+import{a as p}from"../chunks/index.Ch86im5p.js";import{L as l}from"../chunks/layout.BS6XdHxa.js";const n=async a=>{await a.parent();const t=parseInt(a.params.applicationId),o=await p.getApplicationById(t);return{applicationId:t,application:o}},e=Object.freeze(Object.defineProperty({__proto__:null,load:n},Symbol.toStringTag,{value:"Module"}));export{l as component,e as universal};
