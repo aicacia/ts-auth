@@ -97,7 +97,7 @@
 			class="w-full {cn('usernameConfirm')}"
 			type="text"
 			name="usernameConfirm"
-			placeholder={m.user_delete_name_confirm_placeholder({ username })}
+			placeholder={m.user_delete_name_confirm({ username })}
 			bind:value={usernameConfirm}
 			oninput={onChange}
 		/>

@@ -51,12 +51,12 @@ export interface UpdateTenantOauth2ProviderRequest {
 }
 
 /**
- * Oauth2ProviderApi - interface
+ * TenantOauth2ProviderApi - interface
  * 
  * @export
- * @interface Oauth2ProviderApiInterface
+ * @interface TenantOauth2ProviderApiInterface
  */
-export interface Oauth2ProviderApiInterface {
+export interface TenantOauth2ProviderApiInterface {
     /**
      * 
      * @param {number} tenantId Tenant ID
@@ -64,7 +64,7 @@ export interface Oauth2ProviderApiInterface {
      * @param {number} [applicationId] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2ProviderApiInterface
+     * @memberof TenantOauth2ProviderApiInterface
      */
     createTenantOauth2ProviderRaw(requestParameters: CreateTenantOauth2ProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TenantOAuth2Provider>>;
 
@@ -79,7 +79,7 @@ export interface Oauth2ProviderApiInterface {
      * @param {number} [applicationId] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2ProviderApiInterface
+     * @memberof TenantOauth2ProviderApiInterface
      */
     deleteTenantOauth2ProviderRaw(requestParameters: DeleteTenantOauth2ProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
 
@@ -95,20 +95,20 @@ export interface Oauth2ProviderApiInterface {
      * @param {number} [applicationId] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof Oauth2ProviderApiInterface
+     * @memberof TenantOauth2ProviderApiInterface
      */
-    updateTenantOauth2ProviderRaw(requestParameters: UpdateTenantOauth2ProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    updateTenantOauth2ProviderRaw(requestParameters: UpdateTenantOauth2ProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TenantOAuth2Provider>>;
 
     /**
      */
-    updateTenantOauth2Provider(tenantId: number, tenantOauht2ProviderId: number, updateTenantOAuth2Provider: UpdateTenantOAuth2Provider, applicationId?: number | null, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    updateTenantOauth2Provider(tenantId: number, tenantOauht2ProviderId: number, updateTenantOAuth2Provider: UpdateTenantOAuth2Provider, applicationId?: number | null, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TenantOAuth2Provider>;
 
 }
 
 /**
  * 
  */
-export class Oauth2ProviderApi extends runtime.BaseAPI implements Oauth2ProviderApiInterface {
+export class TenantOauth2ProviderApi extends runtime.BaseAPI implements TenantOauth2ProviderApiInterface {
 
     /**
      */
@@ -214,7 +214,7 @@ export class Oauth2ProviderApi extends runtime.BaseAPI implements Oauth2Provider
 
     /**
      */
-    async updateTenantOauth2ProviderRaw(requestParameters: UpdateTenantOauth2ProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async updateTenantOauth2ProviderRaw(requestParameters: UpdateTenantOauth2ProviderRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<TenantOAuth2Provider>> {
         if (requestParameters['tenantId'] == null) {
             throw new runtime.RequiredError(
                 'tenantId',
@@ -262,13 +262,14 @@ export class Oauth2ProviderApi extends runtime.BaseAPI implements Oauth2Provider
             body: UpdateTenantOAuth2ProviderToJSON(requestParameters['updateTenantOAuth2Provider']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => TenantOAuth2ProviderFromJSON(jsonValue));
     }
 
     /**
      */
-    async updateTenantOauth2Provider(tenantId: number, tenantOauht2ProviderId: number, updateTenantOAuth2Provider: UpdateTenantOAuth2Provider, applicationId?: number | null, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.updateTenantOauth2ProviderRaw({ tenantId: tenantId, tenantOauht2ProviderId: tenantOauht2ProviderId, updateTenantOAuth2Provider: updateTenantOAuth2Provider, applicationId: applicationId }, initOverrides);
+    async updateTenantOauth2Provider(tenantId: number, tenantOauht2ProviderId: number, updateTenantOAuth2Provider: UpdateTenantOAuth2Provider, applicationId?: number | null, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<TenantOAuth2Provider> {
+        const response = await this.updateTenantOauth2ProviderRaw({ tenantId: tenantId, tenantOauht2ProviderId: tenantOauht2ProviderId, updateTenantOAuth2Provider: updateTenantOAuth2Provider, applicationId: applicationId }, initOverrides);
+        return await response.value();
     }
 
 }

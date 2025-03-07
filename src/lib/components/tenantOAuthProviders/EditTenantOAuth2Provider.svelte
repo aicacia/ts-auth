@@ -1,29 +1,22 @@
 <script lang="ts" module>
 	import { create, test, enforce, only } from 'vest';
 
-	export interface DeleteApplicationProps {
+	export interface EditTenantOAuth2ProviderProps {
 		applicationId: number;
-		name: string;
-		onDelete(): void;
+		tenantId: number;
+		tenantOAuth2Provider: TenantOAuth2Provider;
+		onEdit(tenantOAuth2Provider: TenantOAuth2Provider): void;
 	}
 
-	type DeleteApplicationForm = {
-		name: string;
-		nameConfirm: string;
-	};
-
 	const createSuite = () =>
-		create((data: Partial<DeleteApplicationForm> = {}, fields: string[]) => {
+		create((data: Partial<TenantOAuth2Provider> = {}, fields: string[]) => {
 			if (!fields.length) {
 				return;
 			}
 			only(fields);
 
-			test('nameConfirm', m.errors_message_required(), () => {
-				enforce(data.nameConfirm).isNotBlank();
-			});
-			test('nameConfirm', m.errors_message_mismatch(), () => {
-				enforce(data.name === data.nameConfirm).isTruthy();
+			test('provider', m.errors_message_required(), () => {
+				enforce(data.provider).isNotBlank();
 			});
 		});
 </script>
@@ -35,11 +28,18 @@
 	import { handleError } from '$lib/errors';
 	import { debounce } from '@aicacia/debounce';
 	import InputResults from '$lib/components/InputResults.svelte';
-	import { applicationApi } from '$lib/openapi';
+	import type { TenantOAuth2Provider } from '$lib/openapi/auth';
+	import { tenantOauth2ProviderApi } from '$lib/openapi';
 
-	let { applicationId, name, onDelete }: DeleteApplicationProps = $props();
+	let {
+		applicationId,
+		tenantId,
+		tenantOAuth2Provider = $bindable(),
+		onEdit
+	}: EditTenantOAuth2ProviderProps = $props();
 
-	let nameConfirm = $state('');
+	let provider = $state(tenantOAuth2Provider.provider);
+
 	let suite = createSuite();
 	let result = $state(suite.get());
 	let loading = $state(false);
@@ -56,13 +56,13 @@
 
 	const fields = new Set<string>();
 	const validate = debounce(() => {
-		suite({ name, nameConfirm }, Array.from(fields)).done((r) => {
+		suite({ provider }, Array.from(fields)).done((r) => {
 			result = r;
 		});
 		fields.clear();
 	}, 300);
 	function validateAll() {
-		fields.add('name');
+		fields.add('provider');
 		validate();
 		validate.flush();
 	}
@@ -75,11 +75,17 @@
 		e.preventDefault();
 		try {
 			loading = true;
-			nameConfirm = nameConfirm.trim();
+			provider = provider.trim();
 			validateAll();
 			if (result.isValid()) {
-				await applicationApi.deleteApplication(applicationId);
-				onDelete();
+				onEdit(
+					await tenantOauth2ProviderApi.updateTenantOauth2Provider(
+						tenantId,
+						tenantOAuth2Provider.id,
+						{ provider },
+						applicationId
+					)
+				);
 			}
 		} catch (error) {
 			await handleError(error);
@@ -90,24 +96,23 @@
 </script>
 
 <form onsubmit={onSubmit}>
-	<p>{m.application_delete_application_description()}</p>
 	<div class="mb-2">
 		<input
-			class="w-full {cn('nameConfirm')}"
+			class="w-full {cn('provider')}"
 			type="text"
-			name="nameConfirm"
-			placeholder={m.application_delete_name_confirm({ name })}
-			bind:value={nameConfirm}
+			name="provider"
+			placeholder={m.tenant_oauth2_provider_provider_placeholder()}
+			bind:value={provider}
 			oninput={onChange}
 		/>
-		<InputResults name="nameConfirm" {result} />
+		<InputResults name="provider" {result} />
 	</div>
 	<div class="flex flex-row justify-end">
-		<button type="submit" class="btn danger flex flex-shrink" {disabled}>
+		<button type="submit" class="btn primary flex flex-shrink" {disabled}>
 			{#if loading}<div class="mr-2 flex flex-row justify-center">
 					<div class="inline-block h-6 w-6"><Spinner /></div>
 				</div>{/if}
-			{m.application_delete_submit()}
+			{m.tenant_oauth2_provider_edit_submit()}
 		</button>
 	</div>
 </form>

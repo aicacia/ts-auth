@@ -1,29 +1,31 @@
 <script lang="ts" module>
 	import { create, test, enforce, only } from 'vest';
 
-	export interface DeleteApplicationProps {
+	export interface DeleteTenantOAuth2ProviderProps {
 		applicationId: number;
-		name: string;
+		tenantId: number;
+		tenantOAuth2ProviderId: number;
+		provider: string;
 		onDelete(): void;
 	}
 
-	type DeleteApplicationForm = {
-		name: string;
-		nameConfirm: string;
+	type DeleteTenantOAuth2ProviderForm = {
+		provider: string;
+		providerConfirm: string;
 	};
 
 	const createSuite = () =>
-		create((data: Partial<DeleteApplicationForm> = {}, fields: string[]) => {
+		create((data: Partial<DeleteTenantOAuth2ProviderForm> = {}, fields: string[]) => {
 			if (!fields.length) {
 				return;
 			}
 			only(fields);
 
-			test('nameConfirm', m.errors_message_required(), () => {
-				enforce(data.nameConfirm).isNotBlank();
+			test('providerConfirm', m.errors_message_required(), () => {
+				enforce(data.providerConfirm).isNotBlank();
 			});
-			test('nameConfirm', m.errors_message_mismatch(), () => {
-				enforce(data.name === data.nameConfirm).isTruthy();
+			test('providerConfirm', m.errors_message_mismatch(), () => {
+				enforce(data.provider === data.providerConfirm).isTruthy();
 			});
 		});
 </script>
@@ -35,11 +37,17 @@
 	import { handleError } from '$lib/errors';
 	import { debounce } from '@aicacia/debounce';
 	import InputResults from '$lib/components/InputResults.svelte';
-	import { applicationApi } from '$lib/openapi';
+	import { tenantOauth2ProviderApi } from '$lib/openapi';
 
-	let { applicationId, name, onDelete }: DeleteApplicationProps = $props();
+	let {
+		applicationId,
+		tenantId,
+		tenantOAuth2ProviderId,
+		provider,
+		onDelete
+	}: DeleteTenantOAuth2ProviderProps = $props();
 
-	let nameConfirm = $state('');
+	let providerConfirm = $state('');
 	let suite = createSuite();
 	let result = $state(suite.get());
 	let loading = $state(false);
@@ -56,7 +64,7 @@
 
 	const fields = new Set<string>();
 	const validate = debounce(() => {
-		suite({ name, nameConfirm }, Array.from(fields)).done((r) => {
+		suite({ provider, providerConfirm }, Array.from(fields)).done((r) => {
 			result = r;
 		});
 		fields.clear();
@@ -75,10 +83,14 @@
 		e.preventDefault();
 		try {
 			loading = true;
-			nameConfirm = nameConfirm.trim();
+			providerConfirm = providerConfirm.trim();
 			validateAll();
 			if (result.isValid()) {
-				await applicationApi.deleteApplication(applicationId);
+				await tenantOauth2ProviderApi.deleteTenantOauth2Provider(
+					tenantId,
+					tenantOAuth2ProviderId,
+					applicationId
+				);
 				onDelete();
 			}
 		} catch (error) {
@@ -90,24 +102,26 @@
 </script>
 
 <form onsubmit={onSubmit}>
-	<p>{m.application_delete_application_description()}</p>
+	<p>{m.tenant_oauth2_provider_delete_tenant_oauth2_provider_description()}</p>
 	<div class="mb-2">
 		<input
-			class="w-full {cn('nameConfirm')}"
+			class="w-full {cn('providerConfirm')}"
 			type="text"
-			name="nameConfirm"
-			placeholder={m.application_delete_name_confirm({ name })}
-			bind:value={nameConfirm}
+			name="providerConfirm"
+			placeholder={m.tenant_oauth2_provider_delete_provider_confirm({
+				provider
+			})}
+			bind:value={providerConfirm}
 			oninput={onChange}
 		/>
-		<InputResults name="nameConfirm" {result} />
+		<InputResults name="providerConfirm" {result} />
 	</div>
 	<div class="flex flex-row justify-end">
 		<button type="submit" class="btn danger flex flex-shrink" {disabled}>
 			{#if loading}<div class="mr-2 flex flex-row justify-center">
 					<div class="inline-block h-6 w-6"><Spinner /></div>
 				</div>{/if}
-			{m.application_delete_submit()}
+			{m.tenant_oauth2_provider_delete_submit()}
 		</button>
 	</div>
 </form>

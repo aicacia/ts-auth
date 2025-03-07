@@ -5,6 +5,7 @@ import {
 	TokenApi,
 	ApplicationApi,
 	TenantApi,
+	TenantOauth2ProviderApi,
 	ServiceAccountApi,
 	UserApi,
 	JwtApi,
@@ -59,6 +60,7 @@ export const registerApi = new RegisterApi(authConfiguration);
 export const tokenApi = new TokenApi(authConfiguration);
 export const applicationApi = new ApplicationApi(authConfiguration);
 export const tenantApi = new TenantApi(authConfiguration);
+export const tenantOauth2ProviderApi = new TenantOauth2ProviderApi(authConfiguration);
 export const serviceAccountApi = new ServiceAccountApi(authConfiguration);
 export const userApi = new UserApi(authConfiguration);
 export const jwtApi = new JwtApi(authConfiguration);

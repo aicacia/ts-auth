@@ -10,31 +10,37 @@
 	import ChevronLeft from 'lucide-svelte/icons/chevron-left';
 	import { base } from '$app/paths';
 	import type { PageData } from './$types';
-	import ServiceAccountsTable from '$lib/components/serviceAccounts/ServiceAccountsTable.svelte';
+	import TenantOAuth2sTable from '$lib/components/tenantOAuthProviders/TenantOAuth2sTable.svelte';
 
 	let { data }: Props = $props();
 
-	let serviceAccountTable = $state<ServiceAccountsTable>();
+	let tenantOAuth2sTable = $state<TenantOAuth2sTable>();
 </script>
 
 <svelte:head>
-	<title>{m.service_account_title()}</title>
+	<title>{m.tenant_title()}</title>
 </svelte:head>
 
 <div class="container mx-auto my-4">
 	<div class="bg-white dark:bg-gray-800 shadow-lg p-4 rounded-lg">
 		<div class="flex flex-grow justify-between">
-			<a class="flex flex-row items-center" href={`${base}/`}>
+			<a
+				class="flex flex-row items-center"
+				href={`${base}/applications/${data.applicationId}/tenants`}
+			>
 				<button class="btn primary icon">
 					<ChevronLeft />
 				</button>
-				<span class="ms-2">{m.service_account_back()}</span>
+				<span class="ms-2">{m.tenant_back()}</span>
 			</a>
-
-			<button class="btn primary icon lg" onclick={serviceAccountTable?.onCreate}>
+			<button class="btn primary icon lg" onclick={tenantOAuth2sTable?.onCreate}>
 				<Plus />
 			</button>
 		</div>
-		<ServiceAccountsTable bind:this={serviceAccountTable} applicationId={data.applicationId} />
+		<TenantOAuth2sTable
+			bind:this={tenantOAuth2sTable}
+			applicationId={data.applicationId}
+			tenant={data.tenant}
+		/>
 	</div>
 </div>
