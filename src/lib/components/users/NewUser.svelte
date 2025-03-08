@@ -8,6 +8,7 @@
 
 	type NewUserForm = {
 		username: string;
+		active: boolean;
 	};
 
 	const createSuite = () =>
@@ -19,6 +20,9 @@
 
 			test('username', m.errors_message_required(), () => {
 				enforce(data.username).isNotBlank();
+			});
+			test('active', m.errors_message_required(), () => {
+				enforce(data.active).isNotBlank();
 			});
 		});
 </script>
@@ -36,6 +40,7 @@
 	let { applicationId, onCreate }: NewUserProps = $props();
 
 	let username = $state('');
+	let active = $state(true);
 	let suite = createSuite();
 	let result = $state(suite.get());
 	let loading = $state(false);
@@ -52,13 +57,14 @@
 
 	const fields = new Set<string>();
 	const validate = debounce(() => {
-		suite({ username }, Array.from(fields)).done((r) => {
+		suite({ username, active }, Array.from(fields)).done((r) => {
 			result = r;
 		});
 		fields.clear();
 	}, 300);
 	function validateAll() {
 		fields.add('username');
+		fields.add('active');
 		validate();
 		validate.flush();
 	}
@@ -74,7 +80,7 @@
 			username = username.trim();
 			validateAll();
 			if (result.isValid()) {
-				onCreate(await userApi.createUser({ active: true, username }, applicationId));
+				onCreate(await userApi.createUser({ active, username }, applicationId));
 			}
 		} catch (error) {
 			await handleError(error);
@@ -86,6 +92,7 @@
 
 <form onsubmit={onSubmit}>
 	<div class="mb-2">
+		<label for="username"> {m.user_username_label()}</label>
 		<input
 			class="w-full {cn('username')}"
 			type="text"
@@ -95,6 +102,20 @@
 			oninput={onChange}
 		/>
 		<InputResults name="username" {result} />
+	</div>
+	<div class="mb-2">
+		<label for="active">
+			{m.user_active_label()}
+			<input
+				class={cn('active')}
+				type="checkbox"
+				name="active"
+				placeholder={m.user_active_placeholder()}
+				bind:checked={active}
+				oninput={onChange}
+			/>
+		</label>
+		<InputResults name="active" {result} />
 	</div>
 	<div class="flex flex-row justify-end">
 		<button type="submit" class="btn primary flex flex-shrink" {disabled}>

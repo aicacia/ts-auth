@@ -15,6 +15,7 @@
 	let { data }: Props = $props();
 
 	let tenantOAuth2sTable = $state<TenantOAuth2sTable>();
+	let oauth2Providers = $state(data.tenant.oauth2Providers);
 </script>
 
 <svelte:head>
@@ -40,7 +41,8 @@
 		<TenantOAuth2sTable
 			bind:this={tenantOAuth2sTable}
 			applicationId={data.applicationId}
-			tenant={data.tenant}
+			tenantId={data.tenantId}
+			{oauth2Providers}
 		/>
 	</div>
 </div>

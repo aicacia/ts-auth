@@ -31,48 +31,22 @@
 	import InputResults from '$lib/components/InputResults.svelte';
 	import type { Application } from '$lib/openapi/auth';
 	import { applicationApi } from '$lib/openapi';
+	import ApplicationForm from './ApplicationForm.svelte';
 
 	let { onCreate }: NewApplicationProps = $props();
 
 	let name = $state('');
 	let suite = createSuite();
 	let result = $state(suite.get());
+	let valid = $state(false);
 	let loading = $state(false);
-	let disabled = $derived(loading);
-	let cn = $derived(
-		classNames(result, {
-			untested: 'untested',
-			tested: 'tested',
-			invalid: 'invalid',
-			valid: 'valid',
-			warning: 'warning'
-		})
-	);
-
-	const fields = new Set<string>();
-	const validate = debounce(() => {
-		suite({ name }, Array.from(fields)).done((r) => {
-			result = r;
-		});
-		fields.clear();
-	}, 300);
-	function validateAll() {
-		fields.add('name');
-		validate();
-		validate.flush();
-	}
-	function onChange(e: Event & { currentTarget: HTMLInputElement | HTMLSelectElement }) {
-		fields.add(e.currentTarget.name);
-		validate();
-	}
+	let disabled = $derived(loading || !valid);
 
 	async function onSubmit(e: SubmitEvent) {
 		e.preventDefault();
 		try {
 			loading = true;
-			name = name.trim();
-			validateAll();
-			if (result.isValid()) {
+			if (valid) {
 				onCreate(await applicationApi.createApplication({ name }));
 			}
 		} catch (error) {
@@ -84,17 +58,7 @@
 </script>
 
 <form onsubmit={onSubmit}>
-	<div class="mb-2">
-		<input
-			class="w-full {cn('name')}"
-			type="text"
-			name="name"
-			placeholder={m.application_name_placeholder()}
-			bind:value={name}
-			oninput={onChange}
-		/>
-		<InputResults name="name" {result} />
-	</div>
+	<ApplicationForm bind:name bind:valid />
 	<div class="flex flex-row justify-end">
 		<button type="submit" class="btn primary flex flex-shrink" {disabled}>
 			{#if loading}<div class="mr-2 flex flex-row justify-center">

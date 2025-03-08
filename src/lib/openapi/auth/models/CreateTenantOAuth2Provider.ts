@@ -21,6 +21,12 @@ import { mapValues } from '../runtime';
 export interface CreateTenantOAuth2Provider {
     /**
      * 
+     * @type {boolean}
+     * @memberof CreateTenantOAuth2Provider
+     */
+    active?: boolean | null;
+    /**
+     * 
      * @type {string}
      * @memberof CreateTenantOAuth2Provider
      */
@@ -90,6 +96,7 @@ export function CreateTenantOAuth2ProviderFromJSONTyped(json: any, ignoreDiscrim
     }
     return {
         
+        'active': json['active'] == null ? undefined : json['active'],
         'authUrl': json['auth_url'] == null ? undefined : json['auth_url'],
         'callbackUrl': json['callback_url'] == null ? undefined : json['callback_url'],
         'clientId': json['client_id'],
@@ -112,6 +119,7 @@ export function CreateTenantOAuth2ProviderToJSONTyped(value?: CreateTenantOAuth2
 
     return {
         
+        'active': value['active'],
         'auth_url': value['authUrl'],
         'callback_url': value['callbackUrl'],
         'client_id': value['clientId'],

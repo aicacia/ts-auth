@@ -21,6 +21,12 @@ import { mapValues } from '../runtime';
 export interface UpdateUser {
     /**
      * 
+     * @type {boolean}
+     * @memberof UpdateUser
+     */
+    active?: boolean | null;
+    /**
+     * 
      * @type {string}
      * @memberof UpdateUser
      */
@@ -44,6 +50,7 @@ export function UpdateUserFromJSONTyped(json: any, ignoreDiscriminator: boolean)
     }
     return {
         
+        'active': json['active'] == null ? undefined : json['active'],
         'username': json['username'] == null ? undefined : json['username'],
     };
 }
@@ -59,6 +66,7 @@ export function UpdateUserToJSONTyped(value?: UpdateUser | null, ignoreDiscrimin
 
     return {
         
+        'active': value['active'],
         'username': value['username'],
     };
 }

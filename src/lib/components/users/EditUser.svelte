@@ -7,8 +7,13 @@
 		onEdit(user: User): void;
 	}
 
+	type EditUserForm = {
+		username: string;
+		active: boolean;
+	};
+
 	const createSuite = () =>
-		create((data: Partial<User> = {}, fields: string[]) => {
+		create((data: EditUserForm, fields: string[]) => {
 			if (!fields.length) {
 				return;
 			}
@@ -16,6 +21,9 @@
 
 			test('username', m.errors_message_required(), () => {
 				enforce(data.username).isNotBlank();
+			});
+			test('active', m.errors_message_required(), () => {
+				enforce(data.active).isNotBlank();
 			});
 		});
 </script>
@@ -33,6 +41,7 @@
 	let { applicationId, user = $bindable(), onEdit }: EditUserProps = $props();
 
 	let username = $state(user.username);
+	let active = $state(user.active);
 
 	let suite = createSuite();
 	let result = $state(suite.get());
@@ -50,13 +59,14 @@
 
 	const fields = new Set<string>();
 	const validate = debounce(() => {
-		suite({ username }, Array.from(fields)).done((r) => {
+		suite({ username, active }, Array.from(fields)).done((r) => {
 			result = r;
 		});
 		fields.clear();
 	}, 300);
 	function validateAll() {
 		fields.add('username');
+		fields.add('active');
 		validate();
 		validate.flush();
 	}
@@ -72,7 +82,7 @@
 			username = username.trim();
 			validateAll();
 			if (result.isValid()) {
-				onEdit(await userApi.updateUser(user.id, { username }, applicationId));
+				onEdit(await userApi.updateUser(user.id, { username, active }, applicationId));
 			}
 		} catch (error) {
 			await handleError(error);
@@ -84,6 +94,7 @@
 
 <form onsubmit={onSubmit}>
 	<div class="mb-2">
+		<label for="username"> {m.user_username_label()}</label>
 		<input
 			class="w-full {cn('username')}"
 			type="text"
@@ -93,6 +104,20 @@
 			oninput={onChange}
 		/>
 		<InputResults name="username" {result} />
+	</div>
+	<div class="mb-2">
+		<label for="active">
+			{m.user_active_label()}
+			<input
+				class={cn('active')}
+				type="checkbox"
+				name="active"
+				placeholder={m.user_active_placeholder()}
+				bind:checked={active}
+				oninput={onChange}
+			/>
+		</label>
+		<InputResults name="active" {result} />
 	</div>
 	<div class="flex flex-row justify-end">
 		<button type="submit" class="btn primary flex flex-shrink" {disabled}>

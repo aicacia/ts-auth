@@ -107,7 +107,9 @@
 			<tr class="group" class:border-b={index < users.length - 1}>
 				<td>{user.id}</td>
 				<td>{user.username}</td>
-				<td>{user.active}</td>
+				<td
+					>{#if user.active}{m.user_table_true()}{:else}{m.user_table_false()}{/if}</td
+				>
 				<td>{user.updatedAt.toLocaleString()}</td>
 				<td>{user.createdAt.toLocaleString()}</td>
 				<td class="flex justify-end">
