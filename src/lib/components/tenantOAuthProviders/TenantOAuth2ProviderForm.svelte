@@ -169,7 +169,6 @@
 			class={cn('active')}
 			type="checkbox"
 			name="active"
-			placeholder={m.tenant_oauth2_provider_active_placeholder()}
 			bind:checked={active}
 			oninput={onChange}
 		/>

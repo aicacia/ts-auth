@@ -110,7 +110,6 @@
 				class={cn('active')}
 				type="checkbox"
 				name="active"
-				placeholder={m.user_active_placeholder()}
 				bind:checked={active}
 				oninput={onChange}
 			/>
