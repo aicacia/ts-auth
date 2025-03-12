@@ -39,6 +39,7 @@
 	import { userApi } from '$lib/openapi';
 	import UserInfoForm from './UserInfoForm.svelte';
 	import EditUserEmails from './EditUserEmails.svelte';
+	import EditUserInfo from './EditUserInfo.svelte';
 
 	let { applicationId, user = $bindable(), onEdit }: EditUserProps = $props();
 
@@ -141,7 +142,7 @@
 		<InputResults name="username" {result} />
 	</div>
 	<div class="mb-2">
-		<label for="active">
+		<label for="active" class="m-0">
 			{m.user_active_label()}
 			<input
 				class={cn('active')}
@@ -153,22 +154,6 @@
 		</label>
 		<InputResults name="active" {result} />
 	</div>
-	<EditUserEmails {applicationId} bind:user />
-	<UserInfoForm
-		bind:address
-		bind:familyName
-		bind:gender
-		bind:givenName
-		bind:locale
-		bind:middleName
-		bind:name
-		bind:nickname
-		bind:profilePicture
-		bind:birthdate
-		bind:website
-		bind:zoneInfo
-		bind:valid={userInfoValid}
-	/>
 	<div class="flex flex-row justify-end">
 		<button type="submit" class="btn primary flex flex-shrink" {disabled}>
 			{#if loading}<div class="mr-2 flex flex-row justify-center">
@@ -178,3 +163,11 @@
 		</button>
 	</div>
 </form>
+
+<hr class="my-2" />
+
+<EditUserEmails {applicationId} bind:user />
+
+<hr class="my-2" />
+
+<EditUserInfo {applicationId} bind:user />

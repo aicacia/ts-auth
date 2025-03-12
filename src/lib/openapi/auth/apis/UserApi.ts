@@ -305,11 +305,11 @@ export interface UserApiInterface {
      * @throws {RequiredError}
      * @memberof UserApiInterface
      */
-    updateUserEmailRaw(requestParameters: UpdateUserEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    updateUserEmailRaw(requestParameters: UpdateUserEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserEmail>>;
 
     /**
      */
-    updateUserEmail(userId: number, emailId: number, serviceAccountUpdateUserEmail: ServiceAccountUpdateUserEmail, applicationId?: number | null, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    updateUserEmail(userId: number, emailId: number, serviceAccountUpdateUserEmail: ServiceAccountUpdateUserEmail, applicationId?: number | null, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserEmail>;
 
     /**
      * 
@@ -336,11 +336,11 @@ export interface UserApiInterface {
      * @throws {RequiredError}
      * @memberof UserApiInterface
      */
-    updateUserPhoneNumberRaw(requestParameters: UpdateUserPhoneNumberRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>>;
+    updateUserPhoneNumberRaw(requestParameters: UpdateUserPhoneNumberRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserPhoneNumber>>;
 
     /**
      */
-    updateUserPhoneNumber(userId: number, phoneNumberId: number, serviceAccountUpdateUserPhoneNumber: ServiceAccountUpdateUserPhoneNumber, applicationId?: number | null, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void>;
+    updateUserPhoneNumber(userId: number, phoneNumberId: number, serviceAccountUpdateUserPhoneNumber: ServiceAccountUpdateUserPhoneNumber, applicationId?: number | null, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserPhoneNumber>;
 
 }
 
@@ -836,7 +836,7 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
 
     /**
      */
-    async updateUserEmailRaw(requestParameters: UpdateUserEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async updateUserEmailRaw(requestParameters: UpdateUserEmailRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserEmail>> {
         if (requestParameters['userId'] == null) {
             throw new runtime.RequiredError(
                 'userId',
@@ -884,13 +884,14 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
             body: ServiceAccountUpdateUserEmailToJSON(requestParameters['serviceAccountUpdateUserEmail']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserEmailFromJSON(jsonValue));
     }
 
     /**
      */
-    async updateUserEmail(userId: number, emailId: number, serviceAccountUpdateUserEmail: ServiceAccountUpdateUserEmail, applicationId?: number | null, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.updateUserEmailRaw({ userId: userId, emailId: emailId, serviceAccountUpdateUserEmail: serviceAccountUpdateUserEmail, applicationId: applicationId }, initOverrides);
+    async updateUserEmail(userId: number, emailId: number, serviceAccountUpdateUserEmail: ServiceAccountUpdateUserEmail, applicationId?: number | null, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserEmail> {
+        const response = await this.updateUserEmailRaw({ userId: userId, emailId: emailId, serviceAccountUpdateUserEmail: serviceAccountUpdateUserEmail, applicationId: applicationId }, initOverrides);
+        return await response.value();
     }
 
     /**
@@ -948,7 +949,7 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
 
     /**
      */
-    async updateUserPhoneNumberRaw(requestParameters: UpdateUserPhoneNumberRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<void>> {
+    async updateUserPhoneNumberRaw(requestParameters: UpdateUserPhoneNumberRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<UserPhoneNumber>> {
         if (requestParameters['userId'] == null) {
             throw new runtime.RequiredError(
                 'userId',
@@ -996,13 +997,14 @@ export class UserApi extends runtime.BaseAPI implements UserApiInterface {
             body: ServiceAccountUpdateUserPhoneNumberToJSON(requestParameters['serviceAccountUpdateUserPhoneNumber']),
         }, initOverrides);
 
-        return new runtime.VoidApiResponse(response);
+        return new runtime.JSONApiResponse(response, (jsonValue) => UserPhoneNumberFromJSON(jsonValue));
     }
 
     /**
      */
-    async updateUserPhoneNumber(userId: number, phoneNumberId: number, serviceAccountUpdateUserPhoneNumber: ServiceAccountUpdateUserPhoneNumber, applicationId?: number | null, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<void> {
-        await this.updateUserPhoneNumberRaw({ userId: userId, phoneNumberId: phoneNumberId, serviceAccountUpdateUserPhoneNumber: serviceAccountUpdateUserPhoneNumber, applicationId: applicationId }, initOverrides);
+    async updateUserPhoneNumber(userId: number, phoneNumberId: number, serviceAccountUpdateUserPhoneNumber: ServiceAccountUpdateUserPhoneNumber, applicationId?: number | null, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<UserPhoneNumber> {
+        const response = await this.updateUserPhoneNumberRaw({ userId: userId, phoneNumberId: phoneNumberId, serviceAccountUpdateUserPhoneNumber: serviceAccountUpdateUserPhoneNumber, applicationId: applicationId }, initOverrides);
+        return await response.value();
     }
 
 }

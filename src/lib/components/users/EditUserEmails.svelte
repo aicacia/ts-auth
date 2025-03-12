@@ -14,6 +14,7 @@
 	import Spinner from '../Spinner.svelte';
 	import { userApi } from '$lib/openapi';
 	import { handleError } from '$lib/errors';
+	import UserEmail from './UserEmail.svelte';
 
 	let { applicationId, user = $bindable() }: EditUserEmailsProps = $props();
 
@@ -31,6 +32,17 @@
 	let newEmailLoading = $state(false);
 	let newEmailDisabled = $derived(newEmailLoading || !newEmailValid);
 
+	function onCancelNewUserEmail(e: Event) {
+		e.stopPropagation();
+		e.preventDefault();
+		cancelNewUserEmail();
+	}
+	function cancelNewUserEmail() {
+		newEmailOpen = false;
+		newEmail = '';
+		newEmailPrimary = false;
+		newEmailVerified = false;
+	}
 	async function onNewEmailSubmit(e: Event) {
 		e.preventDefault();
 		newEmailForm?.validateAll();
@@ -42,6 +54,7 @@
 					{ email: newEmail, primary: newEmailPrimary, verified: newEmailVerified },
 					applicationId
 				);
+				cancelNewUserEmail();
 				if (email.primary) {
 					if (user.email) {
 						user.emails.push(user.email);
@@ -77,6 +90,9 @@
 			bind:valid={newEmailValid}
 		/>
 		<div class="flex flex-row justify-end">
+			<button class="btn secondary flex flex-shrink" onclick={onCancelNewUserEmail}>
+				{m.user_emails_new_cancel()}
+			</button>
 			<button type="submit" class="btn primary flex flex-shrink" disabled={newEmailDisabled}>
 				{#if newEmailLoading}<div class="mr-2 flex flex-row justify-center">
 						<div class="inline-block h-6 w-6"><Spinner /></div>
@@ -86,11 +102,12 @@
 		</div>
 	</form>
 {/if}
+<hr class="my-2" />
 <div class="flex flex-col">
 	{#if user.email}
-		<div>{user.email.email}</div>
+		<UserEmail {applicationId} bind:user email={user.email} />
 	{/if}
 	{#each user.emails as email (email.id)}
-		<div>{email.email}</div>
+		<UserEmail {applicationId} bind:user {email} />
 	{/each}
 </div>

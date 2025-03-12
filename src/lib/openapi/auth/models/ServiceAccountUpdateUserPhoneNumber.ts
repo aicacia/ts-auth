@@ -21,6 +21,12 @@ import { mapValues } from '../runtime';
 export interface ServiceAccountUpdateUserPhoneNumber {
     /**
      * 
+     * @type {string}
+     * @memberof ServiceAccountUpdateUserPhoneNumber
+     */
+    phoneNumber?: string | null;
+    /**
+     * 
      * @type {boolean}
      * @memberof ServiceAccountUpdateUserPhoneNumber
      */
@@ -50,6 +56,7 @@ export function ServiceAccountUpdateUserPhoneNumberFromJSONTyped(json: any, igno
     }
     return {
         
+        'phoneNumber': json['phone_number'] == null ? undefined : json['phone_number'],
         'primary': json['primary'] == null ? undefined : json['primary'],
         'verified': json['verified'] == null ? undefined : json['verified'],
     };
@@ -66,6 +73,7 @@ export function ServiceAccountUpdateUserPhoneNumberToJSONTyped(value?: ServiceAc
 
     return {
         
+        'phone_number': value['phoneNumber'],
         'primary': value['primary'],
         'verified': value['verified'],
     };

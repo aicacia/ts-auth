@@ -137,12 +137,11 @@
 			Array.from(fields)
 		).done((r) => {
 			result = r;
-			console.log(result);
 			valid = result.isValid();
 		});
 		fields.clear();
 	}, 300);
-	function validateAll() {
+	export function validateAll() {
 		fields.add('name');
 		fields.add('givenName');
 		fields.add('familyName');
@@ -171,139 +170,149 @@
 	onMount(validateAll);
 </script>
 
-<div class="mb-2">
-	<label for="name"> {m.user_info_name_label()}</label>
-	<input
-		class="w-full {cn('name')}"
-		type="text"
-		name="name"
-		placeholder={m.user_info_name_placeholder()}
-		bind:value={name}
-		oninput={onChange}
-	/>
-	<InputResults name="name" {result} />
+<div class="flex flex-row mb-2">
+	<div class="mr-1 flex-grow">
+		<label for="name"> {m.user_info_name_label()}</label>
+		<input
+			class="w-full {cn('name')}"
+			type="text"
+			name="name"
+			placeholder={m.user_info_name_placeholder()}
+			bind:value={name}
+			oninput={onChange}
+		/>
+		<InputResults name="name" {result} />
+	</div>
+	<div class="ml-1 flex-grow">
+		<label for="nickname"> {m.user_info_nickname_label()}</label>
+		<input
+			class="w-full {cn('nickname')}"
+			type="text"
+			name="nickname"
+			placeholder={m.user_info_nickname_placeholder()}
+			bind:value={nickname}
+			oninput={onChange}
+		/>
+		<InputResults name="nickname" {result} />
+	</div>
 </div>
-<div class="mb-2">
-	<label for="givenName"> {m.user_info_given_name_label()}</label>
-	<input
-		class="w-full {cn('givenName')}"
-		type="text"
-		name="givenName"
-		placeholder={m.user_info_given_name_placeholder()}
-		bind:value={givenName}
-		oninput={onChange}
-	/>
-	<InputResults name="givenName" {result} />
+<div class="flex flex-row mb-2">
+	<div class="mr-1 flex-grow">
+		<label for="givenName"> {m.user_info_given_name_label()}</label>
+		<input
+			class="w-full {cn('givenName')}"
+			type="text"
+			name="givenName"
+			placeholder={m.user_info_given_name_placeholder()}
+			bind:value={givenName}
+			oninput={onChange}
+		/>
+		<InputResults name="givenName" {result} />
+	</div>
+	<div class="mx-1 flex-grow">
+		<label for="middleName"> {m.user_info_middle_name_label()}</label>
+		<input
+			class="w-full {cn('middleName')}"
+			type="text"
+			name="middleName"
+			placeholder={m.user_info_middle_name_placeholder()}
+			bind:value={middleName}
+			oninput={onChange}
+		/>
+		<InputResults name="middleName" {result} />
+	</div>
+	<div class="ml-1 flex-grow">
+		<label for="familyName"> {m.user_info_family_name_label()}</label>
+		<input
+			class="w-full {cn('familyName')}"
+			type="text"
+			name="familyName"
+			placeholder={m.user_info_family_name_placeholder()}
+			bind:value={familyName}
+			oninput={onChange}
+		/>
+		<InputResults name="familyName" {result} />
+	</div>
 </div>
-<div class="mb-2">
-	<label for="familyName"> {m.user_info_family_name_label()}</label>
-	<input
-		class="w-full {cn('familyName')}"
-		type="text"
-		name="familyName"
-		placeholder={m.user_info_family_name_placeholder()}
-		bind:value={familyName}
-		oninput={onChange}
-	/>
-	<InputResults name="familyName" {result} />
+<div class="flex flex-row mb-2">
+	<div class="mr-1 flex-grow">
+		<label for="profilePicture"> {m.user_info_profile_picture_label()}</label>
+		<input
+			class="w-full {cn('profilePicture')}"
+			type="text"
+			name="profilePicture"
+			placeholder={m.user_info_profile_picture_placeholder()}
+			bind:value={profilePicture}
+			oninput={onChange}
+		/>
+		<InputResults name="profilePicture" {result} />
+	</div>
+	<div class="ml-1 flex-grow">
+		<label for="website"> {m.user_info_website_label()}</label>
+		<input
+			class="w-full {cn('website')}"
+			type="text"
+			name="website"
+			placeholder={m.user_info_website_placeholder()}
+			bind:value={website}
+			oninput={onChange}
+		/>
+		<InputResults name="website" {result} />
+	</div>
 </div>
-<div class="mb-2">
-	<label for="middleName"> {m.user_info_middle_name_label()}</label>
-	<input
-		class="w-full {cn('middleName')}"
-		type="text"
-		name="middleName"
-		placeholder={m.user_info_middle_name_placeholder()}
-		bind:value={middleName}
-		oninput={onChange}
-	/>
-	<InputResults name="middleName" {result} />
+<div class="flex flex-row mb-2">
+	<div class="mr-1 flex-grow">
+		<label for="gender"> {m.user_info_gender_label()}</label>
+		<select
+			class="w-full {cn('gender')}"
+			name="gender"
+			placeholder={m.user_info_gender_placeholder()}
+			bind:value={gender}
+			oninput={onChange}
+		>
+			<option value={'male'}>{m.user_info_gender_male_label()}</option>
+			<option value={'female'}>{m.user_info_gender_female_label()}</option>
+		</select>
+		<InputResults name="gender" {result} />
+	</div>
+	<div class="ml-1 flex-grow">
+		<label for="birthdate"> {m.user_info_birthdate_label()}</label>
+		<input
+			class="w-full {cn('birthdate')}"
+			type="date"
+			name="birthdate"
+			placeholder={m.user_info_birthdate_placeholder()}
+			bind:value={birthdateString}
+			oninput={onBirthdateChange}
+		/>
+		<InputResults name="birthdate" {result} />
+	</div>
 </div>
-<div class="mb-2">
-	<label for="nickname"> {m.user_info_nickname_label()}</label>
-	<input
-		class="w-full {cn('nickname')}"
-		type="text"
-		name="nickname"
-		placeholder={m.user_info_nickname_placeholder()}
-		bind:value={nickname}
-		oninput={onChange}
-	/>
-	<InputResults name="nickname" {result} />
-</div>
-<div class="mb-2">
-	<label for="profilePicture"> {m.user_info_profile_picture_label()}</label>
-	<input
-		class="w-full {cn('profilePicture')}"
-		type="text"
-		name="profilePicture"
-		placeholder={m.user_info_profile_picture_placeholder()}
-		bind:value={profilePicture}
-		oninput={onChange}
-	/>
-	<InputResults name="profilePicture" {result} />
-</div>
-<div class="mb-2">
-	<label for="website"> {m.user_info_website_label()}</label>
-	<input
-		class="w-full {cn('website')}"
-		type="text"
-		name="website"
-		placeholder={m.user_info_website_placeholder()}
-		bind:value={website}
-		oninput={onChange}
-	/>
-	<InputResults name="website" {result} />
-</div>
-<div class="mb-2">
-	<label for="gender"> {m.user_info_gender_label()}</label>
-	<select
-		class="w-full {cn('gender')}"
-		name="gender"
-		placeholder={m.user_info_gender_placeholder()}
-		bind:value={gender}
-		oninput={onChange}
-	>
-		<option value={'male'}>{m.user_info_gender_male_label()}</option>
-		<option value={'female'}>{m.user_info_gender_female_label()}</option>
-	</select>
-	<InputResults name="gender" {result} />
-</div>
-<div class="mb-2">
-	<label for="birthdate"> {m.user_info_birthdate_label()}</label>
-	<input
-		class="w-full {cn('birthdate')}"
-		type="date"
-		name="birthdate"
-		placeholder={m.user_info_birthdate_placeholder()}
-		bind:value={birthdateString}
-		oninput={onBirthdateChange}
-	/>
-	<InputResults name="birthdate" {result} />
-</div>
-<div class="mb-2">
-	<label for="zoneInfo"> {m.user_info_zone_info_label()}</label>
-	<input
-		class="w-full {cn('zoneInfo')}"
-		type="text"
-		name="zoneInfo"
-		placeholder={m.user_info_zone_info_placeholder()}
-		bind:value={zoneInfo}
-		oninput={onChange}
-	/>
-	<InputResults name="zoneInfo" {result} />
-</div>
-<div class="mb-2">
-	<label for="locale"> {m.user_info_locale_label()}</label>
-	<input
-		class="w-full {cn('locale')}"
-		type="text"
-		name="locale"
-		placeholder={m.user_info_locale_placeholder()}
-		bind:value={locale}
-		oninput={onChange}
-	/>
-	<InputResults name="locale" {result} />
+<div class="flex flex-row mb-2">
+	<div class="mr-1 flex-grow">
+		<label for="zoneInfo"> {m.user_info_zone_info_label()}</label>
+		<input
+			class="w-full {cn('zoneInfo')}"
+			type="text"
+			name="zoneInfo"
+			placeholder={m.user_info_zone_info_placeholder()}
+			bind:value={zoneInfo}
+			oninput={onChange}
+		/>
+		<InputResults name="zoneInfo" {result} />
+	</div>
+	<div class="ml-1 flex-grow">
+		<label for="locale"> {m.user_info_locale_label()}</label>
+		<input
+			class="w-full {cn('locale')}"
+			type="text"
+			name="locale"
+			placeholder={m.user_info_locale_placeholder()}
+			bind:value={locale}
+			oninput={onChange}
+		/>
+		<InputResults name="locale" {result} />
+	</div>
 </div>
 <div class="mb-2">
 	<label for="address"> {m.user_info_address_label()}</label>

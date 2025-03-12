@@ -21,6 +21,12 @@ import { mapValues } from '../runtime';
 export interface ServiceAccountUpdateUserEmail {
     /**
      * 
+     * @type {string}
+     * @memberof ServiceAccountUpdateUserEmail
+     */
+    email?: string | null;
+    /**
+     * 
      * @type {boolean}
      * @memberof ServiceAccountUpdateUserEmail
      */
@@ -50,6 +56,7 @@ export function ServiceAccountUpdateUserEmailFromJSONTyped(json: any, ignoreDisc
     }
     return {
         
+        'email': json['email'] == null ? undefined : json['email'],
         'primary': json['primary'] == null ? undefined : json['primary'],
         'verified': json['verified'] == null ? undefined : json['verified'],
     };
@@ -66,6 +73,7 @@ export function ServiceAccountUpdateUserEmailToJSONTyped(value?: ServiceAccountU
 
     return {
         
+        'email': value['email'],
         'primary': value['primary'],
         'verified': value['verified'],
     };
