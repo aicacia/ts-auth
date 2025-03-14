@@ -22,8 +22,8 @@
 	<title>{m.tenant_title()}</title>
 </svelte:head>
 
-<div class="container mx-auto my-4">
-	<div class="bg-white dark:bg-gray-800 shadow-lg p-4 rounded-lg">
+<div class="container mx-auto">
+	<div class="bg-white dark:bg-gray-800 shadow-lg p-4 rounded-lg m-4">
 		<div class="flex flex-grow justify-between">
 			<a
 				class="flex flex-row items-center"
