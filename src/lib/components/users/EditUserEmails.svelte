@@ -4,6 +4,7 @@
 	export interface EditUserEmailsProps {
 		applicationId: number;
 		user: User;
+		onEdit(user: User): void;
 	}
 </script>
 
@@ -16,7 +17,7 @@
 	import { handleError } from '$lib/errors';
 	import UserEmail from './UserEmail.svelte';
 
-	let { applicationId, user = $bindable() }: EditUserEmailsProps = $props();
+	let { applicationId, user = $bindable(), onEdit }: EditUserEmailsProps = $props();
 
 	function onAddEmail(e: Event) {
 		e.preventDefault();
@@ -63,6 +64,7 @@
 				} else {
 					user.emails.push(email);
 				}
+				onEdit(user);
 			} catch (error) {
 				handleError(error);
 			} finally {

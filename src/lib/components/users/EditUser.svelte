@@ -37,28 +37,12 @@
 	import InputResults from '$lib/components/InputResults.svelte';
 	import type { User } from '$lib/openapi/auth';
 	import { userApi } from '$lib/openapi';
-	import UserInfoForm from './UserInfoForm.svelte';
-	import EditUserEmails from './EditUserEmails.svelte';
-	import EditUserInfo from './EditUserInfo.svelte';
+	import { onMount } from 'svelte';
 
 	let { applicationId, user = $bindable(), onEdit }: EditUserProps = $props();
 
 	let username = $state(user.username);
 	let active = $state(user.active);
-
-	let address = $state(user.info.address);
-	let familyName = $state(user.info.familyName);
-	let gender = $state(user.info.gender);
-	let givenName = $state(user.info.givenName);
-	let locale = $state(user.info.locale);
-	let middleName = $state(user.info.middleName);
-	let name = $state(user.info.name);
-	let nickname = $state(user.info.nickname);
-	let profilePicture = $state(user.info.profilePicture);
-	let website = $state(user.info.website);
-	let birthdate = $state(user.info.birthdate);
-	let zoneInfo = $state(user.info.zoneInfo);
-	let userInfoValid = $state(false);
 
 	let suite = createSuite();
 	let result = $state(suite.get());
@@ -82,6 +66,7 @@
 		fields.clear();
 	}, 300);
 	function validateAll() {
+		username = username?.trim();
 		fields.add('username');
 		fields.add('active');
 		validate();
@@ -96,29 +81,10 @@
 		e.preventDefault();
 		try {
 			loading = true;
-			username = username.trim();
 			validateAll();
 			if (result.isValid()) {
-				const updatedUser = await userApi.updateUser(user.id, { username, active }, applicationId);
-				updatedUser.info = await userApi.updateUserInfo(
-					updatedUser.id,
-					{
-						name,
-						givenName,
-						familyName,
-						middleName,
-						nickname,
-						profilePicture,
-						website,
-						gender,
-						birthdate,
-						zoneInfo,
-						locale,
-						address
-					},
-					applicationId
-				);
-				onEdit(await userApi.updateUser(user.id, { username, active }, applicationId));
+				user = await userApi.updateUser(user.id, { username, active }, applicationId);
+				onEdit(user);
 			}
 		} catch (error) {
 			await handleError(error);
@@ -126,6 +92,8 @@
 			loading = false;
 		}
 	}
+
+	onMount(validateAll);
 </script>
 
 <form onsubmit={onSubmit}>
@@ -141,7 +109,7 @@
 		/>
 		<InputResults name="username" {result} />
 	</div>
-	<div class="mb-2">
+	<div>
 		<label for="active" class="m-0">
 			{m.user_active_label()}
 			<input
@@ -163,11 +131,3 @@
 		</button>
 	</div>
 </form>
-
-<hr class="my-2" />
-
-<EditUserEmails {applicationId} bind:user />
-
-<hr class="my-2" />
-
-<EditUserInfo {applicationId} bind:user />

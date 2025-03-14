@@ -19,7 +19,7 @@
 	import Modal from '$lib/components/Modal.svelte';
 	import NewUser from '$lib/components/users/NewUser.svelte';
 	import DeleteUser from '$lib/components/users/DeleteUser.svelte';
-	import EditUser from '$lib/components/users/EditUser.svelte';
+	import EditUserProfile from '$lib/components/users/EditUserProfile.svelte';
 
 	let { applicationId, users = $bindable([]) }: UsersTableProps = $props();
 
@@ -68,8 +68,6 @@
 		if (index !== -1) {
 			users[index] = user;
 		}
-		editUser = undefined;
-		editUserOpen = false;
 	}
 
 	let deleteUser = $state<User | undefined>();
@@ -152,7 +150,7 @@
 		<h3>{m.user_edit_user({ username: editUser?.username || '' })}</h3>
 	{/snippet}
 	{#if editUser}
-		<EditUser {applicationId} user={editUser} onEdit={onEditUser} />
+		<EditUserProfile {applicationId} user={editUser} onEdit={onEditUser} />
 	{/if}
 </Modal>
 

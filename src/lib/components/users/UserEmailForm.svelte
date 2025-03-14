@@ -24,6 +24,12 @@
 			test('email', m.errors_message_required(), () => {
 				enforce(data.email).isNotBlank();
 			});
+			test('primary', m.errors_message_required(), () => {
+				enforce(data.primary).isNotBlank();
+			});
+			test('verified', m.errors_message_required(), () => {
+				enforce(data.verified).isNotBlank();
+			});
 		});
 </script>
 
@@ -62,6 +68,7 @@
 		fields.clear();
 	}, 300);
 	export function validateAll() {
+		email = email?.trim();
 		fields.add('email');
 		fields.add('primary');
 		fields.add('verified');

@@ -2,6 +2,7 @@
 	export interface EditUserProps {
 		applicationId: number;
 		user: User;
+		onEdit(user: User): void;
 	}
 </script>
 

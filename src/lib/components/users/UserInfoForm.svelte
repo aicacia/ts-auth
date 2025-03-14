@@ -40,6 +40,56 @@
 			}
 			only(fields);
 
+			omitWhen(!data.name, () => {
+				test('name', m.errors_message_required(), () => {
+					enforce(data.name).isNotBlank();
+				});
+			});
+			omitWhen(!data.givenName, () => {
+				test('givenName', m.errors_message_required(), () => {
+					enforce(data.givenName).isNotBlank();
+				});
+			});
+			omitWhen(!data.familyName, () => {
+				test('familyName', m.errors_message_required(), () => {
+					enforce(data.familyName).isNotBlank();
+				});
+			});
+			omitWhen(!data.middleName, () => {
+				test('middleName', m.errors_message_required(), () => {
+					enforce(data.middleName).isNotBlank();
+				});
+			});
+			omitWhen(!data.nickname, () => {
+				test('nickname', m.errors_message_required(), () => {
+					enforce(data.nickname).isNotBlank();
+				});
+			});
+			omitWhen(!data.gender, () => {
+				test('gender', m.errors_message_required(), () => {
+					enforce(data.gender).isNotBlank();
+				});
+			});
+			omitWhen(!data.zoneInfo, () => {
+				test('zoneInfo', m.errors_message_required(), () => {
+					enforce(data.zoneInfo).isNotBlank();
+				});
+			});
+			omitWhen(!data.locale, () => {
+				test('locale', m.errors_message_required(), () => {
+					enforce(data.locale).isNotBlank();
+				});
+			});
+			omitWhen(!data.address, () => {
+				test('address', m.errors_message_required(), () => {
+					enforce(data.address).isNotBlank();
+				});
+			});
+			omitWhen(!data.birthdate, () => {
+				test('birthdate', m.errors_message_required(), () => {
+					enforce(data.birthdate).isNotBlank();
+				});
+			});
 			omitWhen(!data.profilePicture, () => {
 				test('profilePicture', m.errors_message_invalid_url(), () => {
 					enforce(data.profilePicture).isURL({
@@ -70,11 +120,6 @@
 						allow_fragments: true,
 						allow_query_components: true
 					});
-				});
-			});
-			omitWhen(!data.birthdate, () => {
-				test('birthdate', m.errors_message_required(), () => {
-					enforce(data.birthdate).isNotBlank();
 				});
 			});
 		});
@@ -142,6 +187,16 @@
 		fields.clear();
 	}, 300);
 	export function validateAll() {
+		address = address?.trim();
+		familyName = familyName?.trim();
+		gender = gender?.trim();
+		givenName = givenName?.trim();
+		middleName = middleName?.trim();
+		nickname = nickname?.trim();
+		profilePicture = profilePicture?.trim();
+		website = website?.trim();
+		zoneInfo = zoneInfo?.trim();
+		locale = locale?.trim();
 		fields.add('name');
 		fields.add('givenName');
 		fields.add('familyName');
