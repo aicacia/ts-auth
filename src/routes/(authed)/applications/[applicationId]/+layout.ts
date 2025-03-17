@@ -1,12 +1,15 @@
-import { applicationApi } from '$lib/openapi';
+import { application } from '$lib/stores/application.svelte';
+import { redirect } from '@sveltejs/kit';
 import type { LayoutLoad } from './$types';
+import { base } from '$app/paths';
 
 export const load: LayoutLoad = async (event) => {
   await event.parent();
-  const applicationId = parseInt(event.params.applicationId);
-  const application = await applicationApi.getApplicationById(applicationId);
+  if (!application.current) {
+    redirect(302, `${base}`);
+  }
   return {
-    applicationId,
-    application
+    applicationId: application.current.id,
+    application: application.current
   };
 };

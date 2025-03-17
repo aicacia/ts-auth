@@ -11,7 +11,6 @@
 	import { userApi } from '$lib/openapi';
 	import type { User, UserPagination } from '$lib/openapi/auth';
 	import * as m from '$lib/paraglide/messages';
-	import { onMount } from 'svelte';
 	import Pencil from 'lucide-svelte/icons/pencil';
 	import EllipsisVertical from 'lucide-svelte/icons/ellipsis-vertical';
 	import Trash from 'lucide-svelte/icons/trash';
@@ -27,7 +26,17 @@
 	let hasMore = $state(true);
 	let loading = $state(false);
 
-	onMount(loadMore);
+	let lastApplicationId = $state<number | undefined>();
+	$effect(() => {
+		if (lastApplicationId !== applicationId) {
+			lastApplicationId = applicationId;
+			page = 0;
+			hasMore = true;
+			loading = false;
+			users = [];
+			loadMore();
+		}
+	});
 
 	export async function loadMore() {
 		if (!hasMore || loading) {

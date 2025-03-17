@@ -3,6 +3,7 @@
 
 	export interface ApplicationTablesProps {
 		applications?: Application[];
+		onSelect?(application: Application): void;
 	}
 </script>
 
@@ -21,8 +22,9 @@
 	import NewApplication from '$lib/components/applications/NewApplication.svelte';
 	import DeleteApplication from '$lib/components/applications/DeleteApplication.svelte';
 	import EditApplication from '$lib/components/applications/EditApplication.svelte';
+	import type { MouseEventHandler } from 'svelte/elements';
 
-	let { applications = $bindable([]) }: ApplicationTablesProps = $props();
+	let { applications = $bindable([]), onSelect }: ApplicationTablesProps = $props();
 	let page = $state(0);
 	let hasMore = $state(true);
 	let loading = $state(false);
@@ -89,6 +91,14 @@
 		deleteApplication = undefined;
 		deleteApplicationOpen = false;
 	}
+
+	function createOnSelect(application: Application) {
+		return () => {
+			if (onSelect) {
+				onSelect(application);
+			}
+		};
+	}
 </script>
 
 <table class="table-auto w-full">
@@ -103,7 +113,11 @@
 	</thead>
 	<tbody>
 		{#each applications as application, index (application.id)}
-			<tr class="group" class:border-b={index < applications.length - 1}>
+			<tr
+				class="group cursor-pointer hover:bg-opacity-25 hover:bg-black"
+				class:border-b={index < applications.length - 1}
+				onclick={createOnSelect(application)}
+			>
 				<td>{application.id}</td>
 				<td>{application.name}</td>
 				<td>{application.updatedAt.toLocaleString()}</td>

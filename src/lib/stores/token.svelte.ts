@@ -13,22 +13,34 @@ const tokenStore = localStorageState<Token | null>('token', null, {
 	}
 });
 
-export function isValidToken() {
-	return !isExpired();
-}
 
-export function isExpired() {
-	if (!tokenStore.value) {
+$effect.root(() => {
+	$effect(() => {
+		setAuthToken(tokenStore.value);
+	});
+});
+
+export const token = {
+	get current() {
+		return tokenStore.value;
+	},
+	get validToken() {
+		return !isExpired(tokenStore.value);
+	}
+};
+
+export function isExpired(token: Token | null) {
+	if (!token) {
 		return true;
 	}
-	return (tokenStore.value.issuedAt.getTime() + (tokenStore.value.expiresIn * 1000)) <= Date.now();
+	return (token.issuedAt.getTime() + (token.expiresIn * 1000)) <= Date.now();
 }
 
-export function isRefreshExpired() {
-	if (!tokenStore.value || !tokenStore.value.refreshTokenExpiresIn) {
+export function isRefreshExpired(token: Token | null) {
+	if (!token || !token.refreshTokenExpiresIn) {
 		return true;
 	}
-	return (tokenStore.value.issuedAt.getTime() + (tokenStore.value.refreshTokenExpiresIn * 1000)) <= Date.now();
+	return (token.issuedAt.getTime() + (token.refreshTokenExpiresIn * 1000)) <= Date.now();
 }
 
 export async function signIn(clientId: string, clientSecret: string) {
@@ -40,7 +52,6 @@ export async function signIn(clientId: string, clientSecret: string) {
 }
 
 export async function signInWithToken(token: Token) {
-	setAuthToken(token);
 	tokenStore.value = token;
 	return token;
 }
@@ -56,30 +67,24 @@ export async function signInWithRefreshToken(refreshToken: string) {
 
 export function signOut() {
 	tokenStore.value = null;
-	setAuthToken(undefined);
 }
 
 let initialCall = true;
 export async function tryGetToken() {
 	try {
-		let token = tokenStore.value;
 		if (initialCall) {
-			if (token) {
-				if (isExpired()) {
-					if (isRefreshExpired()) {
+			if (tokenStore.value) {
+				if (isExpired(tokenStore.value)) {
+					if (isRefreshExpired(tokenStore.value)) {
 						signOut();
-						token = null;
 					} else {
-						token = await signInWithRefreshToken(token.refreshToken as string);
+						await signInWithRefreshToken(tokenStore.value.refreshToken as string);
 					}
 				}
 			}
 			initialCall = false;
 		}
-		if (token) {
-			setAuthToken(token);
-		}
-		return token;
+		return tokenStore.value;
 	} catch (error) {
 		console.error(error);
 		signOut();

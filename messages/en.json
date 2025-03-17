@@ -37,6 +37,7 @@
 	"auth_client_id_placeholder": "Enter Client Id",
 	"auth_client_secret_placeholder": "Enter Client Secret",
 	"application_title": "Applications",
+	"application_select": "Select Application",
 	"application_table_id_label": "Id",
 	"application_table_name_label": "Name",
 	"application_table_updated_ts_label": "Updated",

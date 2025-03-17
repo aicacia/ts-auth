@@ -13,9 +13,9 @@ import {
 	type Token
 } from './auth';
 import { building } from '$app/environment';
-import { getApi } from '$lib/stores/api.svelte';
+import { api } from '$lib/stores/api.svelte';
 
-let authToken: Token | undefined;
+let authToken: Token | null = null;
 
 const defaultConfiguration: AuthConfigurationParameters = {
 	middleware: [
@@ -31,7 +31,7 @@ const defaultAuthConfiguration: AuthConfigurationParameters = {
 	apiKey(name: string) {
 		switch (name) {
 			case 'Tenant-ID': {
-				const tenant = getApi()?.tenant;
+				const tenant = api.tenant;
 				if (tenant) {
 					return tenant;
 				}
@@ -49,7 +49,7 @@ const defaultAuthConfiguration: AuthConfigurationParameters = {
 			console.warn(`Tried to access basePath while building`);
 			return "";
 		}
-		return getApi()?.url;
+		return api.url;
 	}
 };
 
@@ -65,7 +65,7 @@ export const serviceAccountApi = new ServiceAccountApi(authConfiguration);
 export const userApi = new UserApi(authConfiguration);
 export const jwtApi = new JwtApi(authConfiguration);
 
-export function setAuthToken(newAuthToken?: Token) {
+export function setAuthToken(newAuthToken: Token | null) {
 	authToken = newAuthToken;
 }
 export function getAuthToken() {
