@@ -24,12 +24,14 @@
 <div class="container mx-auto">
 	<div class="bg-white dark:bg-gray-800 shadow-lg p-4 rounded-lg m-4">
 		<div class="flex flex-grow justify-between">
-			<a class="flex flex-row items-center" href={`${base}/`}>
-				<button class="btn primary icon">
-					<ChevronLeft />
-				</button>
-				<span class="ms-2">{m.user_back()}</span>
-			</a>
+			<div class="flex flex-row items-center">
+				<a class="flex flex-row items-center" href={`${base}/`}>
+					<button class="btn primary icon">
+						<ChevronLeft />
+					</button>
+				</a>
+				<h3 class="m-0 ms-2">{data.application.name}</h3>
+			</div>
 
 			<button class="btn primary icon lg" onclick={usersTable?.onCreate}>
 				<Plus />

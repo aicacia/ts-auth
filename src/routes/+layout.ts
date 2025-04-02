@@ -1,4 +1,4 @@
-import { tryGetToken } from '$lib/stores/token.svelte';
+import { tryGetToken } from '$lib/state/token.svelte';
 import type { LayoutLoad } from './$types';
 
 export const prerender = true;

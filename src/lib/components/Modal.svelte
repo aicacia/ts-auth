@@ -57,7 +57,7 @@
 	{/if}
 	{#if open}
 		<div
-			class="fixed inset-0 overflow-y-auto z-10"
+			class="fixed inset-0 overflow-y-auto z-20"
 			onpointerdown={onClickOutside}
 			transition:fly={{ duration: 150, y: 300 }}
 		>

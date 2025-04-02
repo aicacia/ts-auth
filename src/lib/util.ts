@@ -4,8 +4,8 @@ import { building, browser } from '$app/environment';
 
 export const DEFAULT_SIZE = 20;
 
-export function unsafeId(value?: string | number) {
-	return `${Math.random().toString(36).substring(2)}${value ? `-${value}` : ''}`;
+export function unsafeId() {
+	return Math.random().toString(36).substring(2);
 }
 
 export function getOrigin() {

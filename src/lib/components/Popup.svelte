@@ -115,13 +115,15 @@
 	}
 </script>
 
+<!-- svelte-ignore a11y_click_events_have_key_events -->
 <div
-	class="absolute flex max-h-full max-w-full flex-col border-gray-300 bg-gray-50 shadow-md transition-transform duration-75 focus:outline-none dark:border-gray-600 dark:bg-gray-700 z-20"
+	class="absolute flex max-h-full max-w-full flex-col border-gray-300 bg-gray-50 shadow-md transition-transform duration-75 focus:outline-none dark:border-gray-600 dark:bg-gray-700 z-30"
 	bind:this={child}
 	bind:offsetWidth
 	use:portal
 	use:clickoutside={{ event: 'pointerdown', enabled: closeOnClickOutside }}
 	onclickoutside={onClickOutside}
+	onclick={onClickOutside}
 	role="menu"
 	class:scale-0={!open}
 	class:scale-100={open}

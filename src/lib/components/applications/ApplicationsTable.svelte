@@ -22,7 +22,6 @@
 	import NewApplication from '$lib/components/applications/NewApplication.svelte';
 	import DeleteApplication from '$lib/components/applications/DeleteApplication.svelte';
 	import EditApplication from '$lib/components/applications/EditApplication.svelte';
-	import type { MouseEventHandler } from 'svelte/elements';
 
 	let { applications = $bindable([]), onSelect }: ApplicationTablesProps = $props();
 	let page = $state(0);

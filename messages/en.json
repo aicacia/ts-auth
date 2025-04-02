@@ -56,7 +56,6 @@
 	"application_edit_application": "Edit \"{name}\"?",
 	"application_edit_submit": "Update",
 	"application_name_placeholder": "Enter Name",
-	"application_back": "Back",
 	"notification_copied_to_clipboard": "Copied to clipboard",
 	"user_title": "Users",
 	"user_table_id_label": "Id",
@@ -79,7 +78,6 @@
 	"user_username_label": "Username",
 	"user_active_label": "Active",
 	"user_username_placeholder": "Enter Username",
-	"user_back": "Back",
 	"user_info_name_label": "Name",
 	"user_info_given_name_label": "Given Name",
 	"user_info_family_name_label": "Family Name",
@@ -145,7 +143,6 @@
 	"service_account_delete_submit": "Delete",
 	"service_account_edit_service_account": "Edit \"{name}\"?",
 	"service_account_edit_submit": "Update",
-	"service_account_back": "Back",
 	"tenant_title": "Tenants",
 	"tenant_table_id_label": "Id",
 	"tenant_table_issuer_label": "Issuer",
@@ -179,7 +176,6 @@
 	"tenant_delete_submit": "Delete",
 	"tenant_edit_tenant": "Edit \"{issuer}\"?",
 	"tenant_edit_submit": "Update",
-	"tenant_back": "Back",
 	"tenant_oauth2_provider_title": "OAuth2 Providers",
 	"tenant_oauth2_provider_table_id_label": "Id",
 	"tenant_oauth2_provider_table_provider_label": "Provider",
@@ -219,6 +215,5 @@
 	"tenant_oauth2_provider_delete_tenant_oauth2_provider_description": "This action cannot be undone. This will permanently delete the tenant oauth2 provider and all associated data.",
 	"tenant_oauth2_provider_delete_submit": "Delete",
 	"tenant_oauth2_provider_edit_tenant_oauth2_provider": "Edit \"{provider}\"?",
-	"tenant_oauth2_provider_edit_submit": "Update",
-	"tenant_oauth2_provider_back": "Back"
+	"tenant_oauth2_provider_edit_submit": "Update"
 }

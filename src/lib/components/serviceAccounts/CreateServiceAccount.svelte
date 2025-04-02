@@ -96,16 +96,18 @@
 </script>
 
 <form onsubmit={onSubmit}>
-	<label for="name">{m.service_account_name_label()}</label>
-	<input
-		class="w-full {cn('name')}"
-		type="text"
-		name="name"
-		placeholder={m.service_account_name_placeholder()}
-		bind:value={name}
-		oninput={onChange}
-	/>
-	<InputResults name="name" {result} />
+	<div class="mb-2">
+		<label for="name">{m.service_account_name_label()}</label>
+		<input
+			class="w-full {cn('name')}"
+			type="text"
+			name="name"
+			placeholder={m.service_account_name_placeholder()}
+			bind:value={name}
+			oninput={onChange}
+		/>
+		<InputResults name="name" {result} />
+	</div>
 	<div class="flex flex-row justify-end">
 		<button type="submit" class="btn primary flex flex-shrink" {disabled}>
 			{#if loading}<div class="mr-2 flex flex-row justify-center">

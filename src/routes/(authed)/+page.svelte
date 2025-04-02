@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import * as m from '$lib/paraglide/messages';
-	import { application } from '$lib/stores/application.svelte';
+	import { application } from '$lib/state/application.svelte';
 </script>
 
 <svelte:head>

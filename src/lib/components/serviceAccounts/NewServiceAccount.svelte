@@ -10,7 +10,7 @@
 	import Copy from 'lucide-svelte/icons/copy';
 	import Password from '../Password.svelte';
 	import { copyToClipboard } from '$lib/util';
-	import { createNotification } from '$lib/stores/notifications.svelte';
+	import { createNotification } from '$lib/state/notifications.svelte';
 
 	let { serviceAccount }: NewServiceAccountProps = $props();
 

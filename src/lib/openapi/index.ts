@@ -13,7 +13,7 @@ import {
 	type Token
 } from './auth';
 import { building } from '$app/environment';
-import { api } from '$lib/stores/api.svelte';
+import { api } from '$lib/state/api.svelte';
 
 let authToken: Token | null = null;
 

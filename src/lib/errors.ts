@@ -1,5 +1,5 @@
 import { ResponseError, type ErrorMessage } from '$lib/openapi/auth';
-import { createNotification } from './stores/notifications.svelte';
+import { createNotification } from './state/notifications.svelte';
 import * as m from '$lib/paraglide/messages';
 
 export type Errors = Record<string, ErrorMessage[]>;

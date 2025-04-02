@@ -28,7 +28,7 @@
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
 	import Spinner from '$lib/components/Spinner.svelte';
-	import { signIn } from '$lib/stores/token.svelte';
+	import { signIn } from '$lib/state/token.svelte';
 	import { handleError } from '$lib/errors';
 	import { debounce } from '@aicacia/debounce';
 	import InputResults from '$lib/components/InputResults.svelte';

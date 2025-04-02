@@ -3,7 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
 	import Dropdown from '$lib/components/Dropdown.svelte';
-	import { signOut, token } from '$lib/stores/token.svelte';
+	import { signOut, token } from '$lib/state/token.svelte';
 	import LogIn from 'lucide-svelte/icons/log-in';
 	import LogOut from 'lucide-svelte/icons/log-out';
 	import Lock from 'lucide-svelte/icons/lock';
@@ -11,8 +11,8 @@
 	import ServerOff from 'lucide-svelte/icons/server-off';
 	import Plus from 'lucide-svelte/icons/plus';
 	import { page } from '$app/state';
-	import { api, clearApi } from '$lib/stores/api.svelte';
-	import { application, setApplication } from '$lib/stores/application.svelte';
+	import { api, clearApi } from '$lib/state/api.svelte';
+	import { application, setApplication } from '$lib/state/application.svelte';
 	import Modal from './Modal.svelte';
 	import ApplicationsTable from './applications/ApplicationsTable.svelte';
 	import type { Application } from '$lib/openapi/auth';
@@ -54,13 +54,15 @@
 		<a class="btn icon" href={`${base}/`}>
 			<Lock />
 		</a>
-		<button class="btn primary ms-2" onclick={onOpenApplicationSelect}>
-			{#if application?.current}
-				{application.current.name}
-			{:else}
-				{m.application_select()}
-			{/if}
-		</button>
+		{#if api.connected && token.validToken}
+			<button class="btn primary ms-2" onclick={onOpenApplicationSelect}>
+				{#if application?.current}
+					{application.current.name}
+				{:else}
+					{m.application_select()}
+				{/if}
+			</button>
+		{/if}
 	</div>
 	<div class="me-2 flex flex-shrink flex-row">
 		<div class="flex flex-col content-center justify-center m-1">

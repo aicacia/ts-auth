@@ -47,7 +47,7 @@
 	import { handleError } from '$lib/errors';
 	import { debounce } from '@aicacia/debounce';
 	import InputResults from '$lib/components/InputResults.svelte';
-	import { api, setApi } from '$lib/stores/api.svelte';
+	import { api, setApi } from '$lib/state/api.svelte';
 
 	let url = $state(api.url || '');
 	let tenant = $state(api.tenant || '');

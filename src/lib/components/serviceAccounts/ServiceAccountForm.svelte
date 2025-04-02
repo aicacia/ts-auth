@@ -1,5 +1,5 @@
 <script lang="ts" module>
-	import { create, test, enforce, only, omitWhen } from 'vest';
+	import { create, test, enforce, only } from 'vest';
 
 	export interface EditServiceAccountProps {
 		name: string;

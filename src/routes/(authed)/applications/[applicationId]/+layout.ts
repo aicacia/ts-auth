@@ -1,4 +1,4 @@
-import { application } from '$lib/stores/application.svelte';
+import { application } from '$lib/state/application.svelte';
 import { redirect } from '@sveltejs/kit';
 import type { LayoutLoad } from './$types';
 import { base } from '$app/paths';
