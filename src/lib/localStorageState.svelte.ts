@@ -69,7 +69,7 @@ export function localStorageState<T>(key: string, initialValue: T, options: Opti
 			updateStorage(state);
 		});
 
-		return () => {};
+		return () => { };
 	});
 
 	return {
@@ -78,6 +78,9 @@ export function localStorageState<T>(key: string, initialValue: T, options: Opti
 		},
 		set value(newValue: T) {
 			state = newValue;
+		},
+		update(updater: (value: T) => T) {
+			state = updater(state);
 		},
 		reset() {
 			state = initialValue;

@@ -134,8 +134,10 @@
 </Modal>
 
 <style lang="postcss">
+	@reference "tailwindcss";
+
 	li.active,
 	a.active {
-		@apply bg-black bg-opacity-10;
+		@apply bg-black/10;
 	}
 </style>

@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 node:22-alpine3.21 as node-builder
+FROM --platform=linux/amd64 node:24-alpine3.21 AS node-builder
 RUN npm install -g pnpm@9
 
 WORKDIR /app
@@ -15,7 +15,7 @@ COPY postcss.config.cjs svelte.config.js tailwind.config.cjs vite.config.js ./
 
 RUN pnpm run build
 
-FROM --platform=linux/amd64 nginx:1.27-alpine3.20-slim
+FROM --platform=linux/amd64 nginx:1.27-alpine3.21-slim
 LABEL org.opencontainers.image.source https://github.com/aicacia/ts-auth
 
 COPY default.conf.template /etc/nginx/templates/default.conf.template

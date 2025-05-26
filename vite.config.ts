@@ -1,11 +1,12 @@
-import { defineConfig, loadEnv } from 'vite';
+import { paraglideVitePlugin } from '@inlang/paraglide-js'
+import { defineConfig, loadEnv, type UserConfig } from 'vite';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { readFileSync } from 'node:fs';
-import { paraglide } from '@inlang/paraglide-sveltekit/vite';
+import tailwindcss from '@tailwindcss/vite';
 
 // https://vitejs.dev/config/
 export default defineConfig(async ({ mode }) => {
-	const isProd = mode === 'production';
+	const isProd = mode === "production";
 
 	process.env = { ...process.env, ...loadEnv(mode, process.cwd(), '') };
 
@@ -14,33 +15,28 @@ export default defineConfig(async ({ mode }) => {
 	const define = {
 		__VERSION__: JSON.stringify(packageJSON.version)
 	};
-	/** @type {import('vite').UserConfig} */
-	const config = {
+
+	const config: UserConfig = {
 		clearScreen: false,
 		server: {
 			host: '0.0.0.0',
 			port: 5173,
-			strictPort: true,
-			hmr: {
-				protocol: 'ws',
-				host: '0.0.0.0',
-				port: 5183
-			},
-			watch: {
-				ignored: ['**/src-tauri/**']
-			}
-		},
-		preview: {
-			port: 5173,
 			strictPort: true
 		},
+		envPrefix: ['VITE_'],
 		plugins: [
-			paraglide({
+			tailwindcss(),
+			sveltekit(),
+			paraglideVitePlugin({
 				project: './project.inlang',
-				outdir: './src/lib/paraglide'
+				outdir: './src/lib/paraglide',
+				strategy: ['baseLocale', 'preferredLanguage'],
 			}),
-			sveltekit()
 		],
+		build: {
+			minify: isProd ? 'esbuild' : false,
+			sourcemap: !isProd,
+		},
 		define
 	};
 

@@ -113,7 +113,7 @@
 	<tbody>
 		{#each applications as application, index (application.id)}
 			<tr
-				class="group cursor-pointer hover:bg-opacity-25 hover:bg-black"
+				class="group cursor-pointer hover:bg-black/25"
 				class:border-b={index < applications.length - 1}
 				onclick={createOnSelect(application)}
 			>

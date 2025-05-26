@@ -1,6 +1,4 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@import "tailwindcss";
 
 @layer base {
 	* {
@@ -196,12 +194,6 @@
 	}
 	.badge.secondary {
 		@apply border-gray-900 bg-black text-white dark:bg-white dark:!text-gray-950;
-	}
-	.badge.green {
-		@apply border-green-500 bg-green-300 text-green--950;
-	}
-	.badge.winter-hazel {
-		@apply border-winter-hazel-500 bg-winter-hazel-300 text-winter-hazel-950;
 	}
 	.badge.dark {
 		@apply border-gray-800 bg-gray-950 text-gray-100;
