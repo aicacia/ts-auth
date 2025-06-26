@@ -1,5 +1,5 @@
 <script lang="ts" module>
-	import { create, test, enforce, only } from 'vest';
+	import { create, test, enforce, only, skipWhen } from 'vest';
 	import 'vest/enforce/isURL';
 
 	type ApiForm = {
@@ -8,7 +8,7 @@
 	};
 
 	const createSuite = () =>
-		create((data: Partial<ApiForm> = {}, fields: string[]) => {
+		create((data: ApiForm, fields: string[]) => {
 			if (!fields.length) {
 				return;
 			}
@@ -32,6 +32,23 @@
 					allow_query_components: false
 				});
 			});
+			skipWhen(
+				(result) => result.hasErrors('url'),
+				() => {
+					test('url', m.errors_message_invalid_url(), async () => {
+						const utilApi = new UtilApi(
+							new Configuration({
+								...configurationParameters,
+								get basePath() {
+									return api.url;
+								}
+							})
+						);
+						await utilApi.version();
+					});
+				}
+			);
+			test('url', m.errors_message_invalid_url(), async () => {});
 			test('tenant', m.errors_message_required(), () => {
 				enforce(data.tenant).isNotBlank();
 			});
@@ -48,6 +65,8 @@
 	import { debounce } from '@aicacia/debounce';
 	import InputResults from '$lib/components/InputResults.svelte';
 	import { api, setApi } from '$lib/state/api.svelte';
+	import { Configuration, UtilApi } from '$lib/openapi/auth';
+	import { configurationParameters } from '$lib/openapi';
 
 	let url = $state(api.url || '');
 	let tenant = $state(api.tenant || '');
@@ -66,17 +85,22 @@
 	);
 
 	const fields = new Set<string>();
-	const validate = debounce(() => {
-		suite({ url, tenant }, Array.from(fields)).done((r) => {
-			result = r;
-		});
-		fields.clear();
-	}, 300);
+	const validate = debounce(
+		() =>
+			new Promise<boolean>((resolve) => {
+				suite({ url, tenant }, Array.from(fields)).done((r) => {
+					result = r;
+					resolve(result.isValid());
+				});
+				fields.clear();
+			}),
+		300
+	);
 	function validateAll() {
 		fields.add('url');
 		fields.add('tenant');
 		validate();
-		validate.flush();
+		return validate.flush();
 	}
 	function onChange(e: Event & { currentTarget: HTMLInputElement | HTMLSelectElement }) {
 		fields.add(e.currentTarget.name);
@@ -89,8 +113,7 @@
 			loading = true;
 			url = url.trim();
 			tenant = tenant.trim();
-			validateAll();
-			if (result.isValid()) {
+			if (await validateAll()) {
 				await setApi({ url, tenant });
 				await goto(`${base}/signin`);
 			}

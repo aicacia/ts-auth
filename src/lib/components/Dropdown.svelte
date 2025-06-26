@@ -40,7 +40,7 @@
 	<div
 		aria-label={name}
 		class="flex min-w-fit flex-grow items-center justify-center"
-		onpointerdown={toggle}
+		onclick={toggle}
 	>
 		{@render button()}
 	</div>

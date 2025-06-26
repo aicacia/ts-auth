@@ -1,5 +1,5 @@
 import {
-	Configuration as AuthConfiguration,
+	Configuration,
 	CurrentUserApi,
 	RegisterApi,
 	TokenApi,
@@ -9,7 +9,8 @@ import {
 	ServiceAccountApi,
 	UserApi,
 	JwtApi,
-	type ConfigurationParameters as AuthConfigurationParameters,
+	UtilApi,
+	type ConfigurationParameters,
 	type Token
 } from './auth';
 import { building } from '$app/environment';
@@ -17,7 +18,7 @@ import { api } from '$lib/state/api.svelte';
 
 let authToken: Token | null = null;
 
-const defaultConfiguration: AuthConfigurationParameters = {
+export const defaultConfigurationParameters: ConfigurationParameters = {
 	middleware: [
 		{
 			pre: async (context) => ({ ...context, init: { ...context.init, mode: 'cors' } })
@@ -26,8 +27,8 @@ const defaultConfiguration: AuthConfigurationParameters = {
 	credentials: 'same-origin'
 };
 
-const defaultAuthConfiguration: AuthConfigurationParameters = {
-	...defaultConfiguration,
+export const configurationParameters: ConfigurationParameters = {
+	...defaultConfigurationParameters,
 	apiKey(name: string) {
 		switch (name) {
 			case 'Tenant-ID': {
@@ -46,24 +47,25 @@ const defaultAuthConfiguration: AuthConfigurationParameters = {
 	},
 	get basePath() {
 		if (building) {
-			console.warn(`Tried to access basePath while building`);
+			console.warn("Tried to access basePath while building");
 			return "";
 		}
 		return api.url;
 	}
 };
 
-export const authConfiguration = new AuthConfiguration(defaultAuthConfiguration);
+export const configuration = new Configuration(configurationParameters);
 
-export const currentUserApi = new CurrentUserApi(authConfiguration);
-export const registerApi = new RegisterApi(authConfiguration);
-export const tokenApi = new TokenApi(authConfiguration);
-export const applicationApi = new ApplicationApi(authConfiguration);
-export const tenantApi = new TenantApi(authConfiguration);
-export const tenantOauth2ProviderApi = new TenantOauth2ProviderApi(authConfiguration);
-export const serviceAccountApi = new ServiceAccountApi(authConfiguration);
-export const userApi = new UserApi(authConfiguration);
-export const jwtApi = new JwtApi(authConfiguration);
+export const currentUserApi = new CurrentUserApi(configuration);
+export const registerApi = new RegisterApi(configuration);
+export const tokenApi = new TokenApi(configuration);
+export const applicationApi = new ApplicationApi(configuration);
+export const tenantApi = new TenantApi(configuration);
+export const tenantOauth2ProviderApi = new TenantOauth2ProviderApi(configuration);
+export const serviceAccountApi = new ServiceAccountApi(configuration);
+export const userApi = new UserApi(configuration);
+export const jwtApi = new JwtApi(configuration);
+export const utilApi = new UtilApi(configuration);
 
 export function setAuthToken(newAuthToken: Token | null) {
 	authToken = newAuthToken;

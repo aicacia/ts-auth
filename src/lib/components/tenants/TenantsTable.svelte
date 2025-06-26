@@ -21,6 +21,7 @@
 	import EditTenant from '$lib/components/tenants/EditTenant.svelte';
 	import { base } from '$app/paths';
 	import ExternalLink from 'lucide-svelte/icons/external-link';
+	import { goto } from '$app/navigation';
 
 	let { applicationId, tenants = $bindable([]) }: TenantsTableProps = $props();
 
@@ -105,6 +106,11 @@
 		deleteTenant = undefined;
 		deleteTenantOpen = false;
 	}
+
+	function createOnSelect(tenant: Tenant) {
+		return () =>
+			goto(`${base}/applications/${applicationId}/tenants/${tenant.id}/oauth2-providers`);
+	}
 </script>
 
 <table class="table-auto w-full">
@@ -120,7 +126,11 @@
 	</thead>
 	<tbody>
 		{#each tenants as tenant, index (tenant.id)}
-			<tr class="group" class:border-b={index < tenants.length - 1}>
+			<tr
+				class="group cursor-pointer hover:bg-black/25"
+				class:border-b={index < tenants.length - 1}
+				onclick={createOnSelect(tenant)}
+			>
 				<td>{tenant.id}</td>
 				<td>{tenant.issuer}</td>
 				<td>{tenant.clientId}</td>
